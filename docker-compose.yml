@@ -1,0 +1,66 @@
+version: '2'
+services:
+  # Kong
+  kong-datastore:
+    image: busybox
+    volumes:
+      - /var/lib/postgresql/data
+  kong-database:
+    image: postgres:9.4
+    environment:
+      - POSTGRES_USER=kong
+      - POSTGRES_DB=kong
+    ports:
+      - "5432:5432"
+    volumes_from:
+      - kong-datastore
+  kong-application:
+    image: mashape/kong
+    environment:
+      - DATABASE=postgres
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8443:8443"
+      - "7946:7946"
+      - "7946:7946/udp"
+    depends_on:
+      - kong-database
+    volumes_from:
+      - kong-datastore
+    networks:
+      - kong-cuenta
+
+  # Cuenta
+  cuenta-datastore:
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+      - /app/log
+  cuenta-database:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "13306:3306"
+    volumes_from:
+      - cuenta-datastore
+  cuenta-application:
+    image: cuenta-application
+    environment:
+      - CUENTA_PORT=4000
+      - CUENTA_DATABASE_HOST=cuenta-database
+      - CUENTA_DATABASE_USER=root
+      - CUENTA_DATABASE_PASSWORD=root
+    ports:
+      - "4000:4000"
+    depends_on:
+      - cuenta-database
+    volumes_from:
+      - cuenta-datastore
+    networks:
+      - kong-cuenta
+
+networks:
+  kong-cuenta:
+    driver: bridge
