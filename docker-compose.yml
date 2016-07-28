@@ -3,11 +3,11 @@ services:
   # Kong
   kong-datastore:
     extends:
-      file: kong.yml
+      file: docker-kong.yml
       service: datastore
   kong-database:
     extends:
-      file: kong.yml
+      file: docker-kong.yml
       service: database
     volumes_from:
       - kong-datastore
@@ -15,7 +15,7 @@ services:
       - kong
   kong-application:
     extends:
-      file: kong.yml
+      file: docker-kong.yml
       service: application
     depends_on:
       - kong-database
@@ -28,11 +28,11 @@ services:
   # Cuenta
   cuenta-datastore:
     extends:
-      file: cuenta.yml
+      file: docker-cuenta.yml
       service: datastore
   cuenta-database:
     extends:
-      file: cuenta.yml
+      file: docker-cuenta.yml
       service: database
     volumes_from:
       - cuenta-datastore
@@ -40,7 +40,7 @@ services:
       - cuenta
   cuenta-application:
     extends:
-      file: cuenta.yml
+      file: docker-cuenta.yml
       service: application
     depends_on:
       - cuenta-database
