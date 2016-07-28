@@ -1,0 +1,22 @@
+version: '2'
+services:
+  datastore:
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+      - /app/log
+  database:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "13306:3306"
+  application:
+    image: cuenta-application
+    environment:
+      - CUENTA_PORT=4000
+      - CUENTA_DATABASE_HOST=cuenta-database
+      - CUENTA_DATABASE_USER=root
+      - CUENTA_DATABASE_PASSWORD=root
+    ports:
+      - "4000:4000"
