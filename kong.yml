@@ -9,8 +9,6 @@ services:
     environment:
       - POSTGRES_USER=kong
       - POSTGRES_DB=kong
-    ports:
-      - "5432:5432"
   application:
     image: mashape/kong
     environment:
