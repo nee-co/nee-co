@@ -14,6 +14,8 @@ services:
       - "5432:5432"
     volumes_from:
       - kong-datastore
+    networks:
+      - kong
   kong-application:
     image: mashape/kong
     environment:
@@ -30,6 +32,7 @@ services:
       - kong-datastore
     networks:
       - kong-cuenta
+      - kong
 
   # Cuenta
   cuenta-datastore:
@@ -45,6 +48,8 @@ services:
       - "13306:3306"
     volumes_from:
       - cuenta-datastore
+    networks:
+      - cuenta
   cuenta-application:
     image: cuenta-application
     environment:
@@ -60,7 +65,12 @@ services:
       - cuenta-datastore
     networks:
       - kong-cuenta
+      - cuenta
 
 networks:
   kong-cuenta:
+    driver: bridge
+  kong:
+    driver: bridge
+  cuenta:
     driver: bridge
