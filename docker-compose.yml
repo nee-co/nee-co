@@ -23,6 +23,7 @@ services:
       - kong-datastore
     networks:
       - kong-cuenta
+      - kong-aldea
       - kong
 
   # Cuenta
@@ -50,10 +51,39 @@ services:
       - kong-cuenta
       - cuenta
 
+  # Aldea
+  aldea-datastore:
+    extends:
+      file: docker-aldea.yml
+      service: datastore
+  aldea-database:
+    extends:
+      file: docker-aldea.yml
+      service: database
+    volumes_from:
+      - aldea-datastore
+    networks:
+      - aldea
+  aldea-application:
+    extends:
+      file: docker-aldea.yml
+      service: application
+    depends_on:
+      - aldea-database
+    volumes_from:
+      - aldea-datastore
+    networks:
+      - kong-aldea
+      - aldea
+
 networks:
   kong-cuenta:
+    driver: bridge
+  kong-aldea:
     driver: bridge
   kong:
     driver: bridge
   cuenta:
+    driver: bridge
+  aldea:
     driver: bridge
