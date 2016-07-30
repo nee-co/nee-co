@@ -56,3 +56,21 @@ curl -sS http://localhost:8001/apis | jq
 
 # Kong経由でイベントAPIを呼ぶ
 curl -sS http://localhost:8000/events | jq
+
+# JWT Plugin ============================================================
+
+# CuentaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
+curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
+
+# CuentaにJWT認証Pluginが登録されていることを確認
+curl -sS http://localhost:8001/apis/cuenta/plugins | jq
+
+## ここから下は本来Cuentaが処理する(まだ未実装)
+
+# ID=1のユーザをConsumer登録
+curl -sS -X POST http://localhost:8001/consumers --data "username=g002b8136" --data "custom_id=1" | jq
+
+# ID=1のユーザがConsumerに登録されていることを確認
+curl -sS http://localhost:8001/consumers/g002b8136 | jq
+
+curl -X POST http://localhost:8001/consumers/$(curl -sS http://localhost:8001/consumers/g002b8136 | jq -r .id)/jwt --data '' | jq
