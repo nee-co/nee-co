@@ -28,8 +28,11 @@ docker-compose up -d cuenta-application
 # 試しにユーザAPIを読ぶ => ポートを開けていないため呼べないことを確認
 curl http://localhost:4000/users/list?user_ids=1
 
-# KongにCuentaを登録
+# KongにCuentaを登録(ユーザ側)
 curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=cuenta' --data 'upstream_url=http://cuenta-application:4000' --data 'request_path=/users' | jq
+
+# KongにCuentaを登録(認証側)
+curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=cuenta-auth' --data 'upstream_url=http://cuenta-application:4000' --data 'request_path=/auth' | jq
 
 # KongにCuentaが登録されていることを確認
 curl -sS http://localhost:8001/apis | jq
@@ -56,3 +59,31 @@ curl -sS http://localhost:8001/apis | jq
 
 # Kong経由でイベントAPIを呼ぶ
 curl -sS http://localhost:8000/events | jq
+
+# JWT Plugin ============================================================
+
+# CuentaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
+curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
+
+# AldeaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
+curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/aldea | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
+
+# Cuenta/AldeaにJWT認証Pluginが登録されていることを確認
+curl -sS http://localhost:8001/apis/cuenta/plugins | jq
+curl -sS http://localhost:8001/apis/aldea/plugins | jq
+
+# tokenを含めずにCuenta/Aldeaにアクセスする(認証エラーとなる)
+curl -sS http://localhost:8000/users/list?user_ids=1 | jq
+curl -sS http://localhost:8000/events | jq
+
+# Cuentaにログインする(同時にCuenta => Kongへのconsumer登録APIが送信される)
+curl -sS -X POST http://localhost:8000/auth/login --data 'number=g002b8136' --data 'password=g002b8136password' | jq -r .token | tee token
+
+# ID=1のユーザがConsumerに登録されていることを確認
+curl -sS http://localhost:8001/consumers/g002b8136 | jq
+
+# tokenを含めてCuentaにアクセスする
+cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:8000/users/search?str=G | jq
+
+# tokenを含めてAldeaにアクセスする
+cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:8000/events | jq

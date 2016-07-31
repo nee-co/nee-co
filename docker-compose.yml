@@ -2,21 +2,28 @@ version: '2'
 services:
   # Kong
   kong-datastore:
-    extends:
-      file: docker-kong.yml
-      service: datastore
+    image: busybox
+    volumes:
+      - /var/lib/postgresql/data
   kong-database:
-    extends:
-      file: docker-kong.yml
-      service: database
+    image: postgres:9.4
+    environment:
+      - POSTGRES_USER=kong
+      - POSTGRES_DB=kong
     volumes_from:
       - kong-datastore
     networks:
       - kong
   kong-application:
-    extends:
-      file: docker-kong.yml
-      service: application
+    image: mashape/kong
+    environment:
+      - DATABASE=postgres
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8443:8443"
+      - "7946:7946"
+      - "7946:7946/udp"
     depends_on:
       - kong-database
     volumes_from:
@@ -28,21 +35,28 @@ services:
 
   # Cuenta
   cuenta-datastore:
-    extends:
-      file: docker-cuenta.yml
-      service: datastore
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+      - /app/log
   cuenta-database:
-    extends:
-      file: docker-cuenta.yml
-      service: database
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports: # TODO: ダミーデータ挿入のために開けている。頃合い見て閉じる
+      - "13306:3306"
     volumes_from:
       - cuenta-datastore
     networks:
       - cuenta
   cuenta-application:
-    extends:
-      file: docker-cuenta.yml
-      service: application
+    image: cuenta-application
+    environment:
+      - CUENTA_PORT=4000
+      - CUENTA_DATABASE_HOST=cuenta-database
+      - CUENTA_DATABASE_USER=root
+      - CUENTA_DATABASE_PASSWORD=root
+      - CUENTA_KONG_URL=http://kong-application:8001
     depends_on:
       - cuenta-database
     volumes_from:
@@ -53,21 +67,26 @@ services:
 
   # Aldea
   aldea-datastore:
-    extends:
-      file: docker-aldea.yml
-      service: datastore
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+      - /app/log
   aldea-database:
-    extends:
-      file: docker-aldea.yml
-      service: database
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
     volumes_from:
       - aldea-datastore
     networks:
       - aldea
   aldea-application:
-    extends:
-      file: docker-aldea.yml
-      service: application
+    image: aldea-application
+    environment:
+      - ALDEA_PORT=3000
+      - ALDEA_DATABASE_HOST=aldea-database
+      - ALDEA_DATABASE_USER=root
+      - ALDEA_DATABASE_PASSWORD=root
+      - ALDEA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
     depends_on:
       - aldea-database
     volumes_from:
@@ -75,7 +94,6 @@ services:
     networks:
       - kong-aldea
       - aldea
-
 networks:
   kong-cuenta:
     driver: bridge
