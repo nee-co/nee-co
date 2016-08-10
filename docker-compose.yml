@@ -49,6 +49,7 @@ services:
       - cuenta-datastore
     networks:
       - cuenta
+      - dios
   cuenta-application:
     image: cuenta-application
     environment:
@@ -79,6 +80,7 @@ services:
       - aldea-datastore
     networks:
       - aldea
+      - dios
   aldea-application:
     image: aldea-application
     environment:
@@ -94,12 +96,52 @@ services:
     networks:
       - kong-aldea
       - aldea
+
+  # Dios
+  dios-datastore:
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+      - /app/log
+  dios-database:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes_from:
+      - dios-datastore
+    networks:
+      - dios
+  dios-application:
+    image: dios-application
+    environment:
+      - DIOS_PORT=3000
+      - DIOS_DATABASE_HOST=dios-database
+      - DIOS_DATABASE_USER=root
+      - DIOS_DATABASE_PASSWORD=root
+      - DIOS_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
+      - CUENTA_DATABASE_HOST=cuenta-database
+      - CUENTA_DATABASE_USER=root
+      - CUENTA_DATABASE_PASSWORD=root
+      - ALDEA_DATABASE_HOST=aldea-database
+      - ALDEA_DATABASE_USER=root
+      - ALDEA_DATABASE_PASSWORD=root
+    ports:
+      - "3000:3000"
+    depends_on:
+      - dios-database
+    volumes_from:
+      - dios-datastore
+    networks:
+      - dios
+
 networks:
   kong-cuenta:
     driver: bridge
   kong-aldea:
     driver: bridge
   kong:
+    driver: bridge
+  dios:
     driver: bridge
   cuenta:
     driver: bridge

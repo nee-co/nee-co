@@ -4,7 +4,7 @@
 # - jq をインストールしておく (必須ではないが、JSONをそのまま見るのは辛いので推奨)
 
 # 各DBを立ち上げる
-docker-compose up -d kong-database cuenta-database aldea-database
+docker-compose up -d kong-database cuenta-database aldea-database dios-database
 
 # DBが立ち上がりきっていないとアプリが起動できないため少し待つ
 
@@ -87,3 +87,15 @@ cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:
 
 # tokenを含めてAldeaにアクセスする
 cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:8000/events | jq
+
+# Dios ==============================================================
+
+# DiosDB作成 初回のみ実行する
+docker-compose run dios-application bundle exec rails db:setup
+
+# Dios起動
+docker-compose up -d dios-application
+
+# Diosログイン
+open http://localhost:3000/admin
+Email/Password: admin@example.com/password
