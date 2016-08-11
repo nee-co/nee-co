@@ -17,7 +17,7 @@ curl -sS http://localhost:8001/apis | jq
 # Cuenta ============================================================
 
 # CuentaDB作成 初回のみ実行する
-docker-compose run cuenta-application mix ecto.setup
+docker-compose run --rm cuenta-application mix ecto.setup
 
 # ダミーデータ挿入(環境によって入れ方異なるので各自で頑張って! mysql-client入っているなら下のコメンドでok) warning出るけど無視
 mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
@@ -43,7 +43,7 @@ curl -sS http://localhost:8000/users/list?user_ids=1 | jq
 # Aldea ============================================================
 
 # AldeaDB作成 初回のみ実行する
-docker-compose run aldea-application bundle exec rails db:setup
+docker-compose run --rm aldea-application bundle exec rails db:setup
 
 # Aldea起動
 docker-compose up -d aldea-application
@@ -91,7 +91,7 @@ cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:
 # Dios ==============================================================
 
 # DiosDB作成 初回のみ実行する
-docker-compose run dios-application bundle exec rails db:setup
+docker-compose run --rm dios-application bundle exec rails db:setup
 
 # Dios起動
 docker-compose up -d dios-application
