@@ -64,6 +64,7 @@ services:
       - cuenta-datastore
     networks:
       - kong-cuenta
+      - cuenta-aldea
       - cuenta
 
   # Aldea
@@ -95,6 +96,7 @@ services:
       - aldea-datastore
     networks:
       - kong-aldea
+      - cuenta-aldea
       - aldea
 
   # Dios
@@ -138,6 +140,8 @@ networks:
   kong-cuenta:
     driver: bridge
   kong-aldea:
+    driver: bridge
+  cuenta-aldea:
     driver: bridge
   kong:
     driver: bridge

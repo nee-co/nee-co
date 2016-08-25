@@ -25,7 +25,7 @@ mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
 # Cuenta起動
 docker-compose up -d cuenta-application
 
-# 試しにユーザAPIを読ぶ => ポートを開けていないため呼べないことを確認
+# 試しにユーザAPIを呼ぶ => ポートを開けていないため呼べないことを確認
 curl http://localhost:4000/users/list?user_ids=1
 
 # KongにCuentaを登録(ユーザ側)
@@ -38,7 +38,7 @@ curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=cuenta-auth' --d
 curl -sS http://localhost:8001/apis | jq
 
 # Kong経由でユーザAPIを呼ぶ
-curl -sS http://localhost:8000/users/list?user_ids=1 | jq
+curl -sS http://localhost:8000/users/search?str=g013 | jq
 
 # Aldea ============================================================
 
@@ -73,7 +73,7 @@ curl -sS http://localhost:8001/apis/cuenta/plugins | jq
 curl -sS http://localhost:8001/apis/aldea/plugins | jq
 
 # tokenを含めずにCuenta/Aldeaにアクセスする(認証エラーとなる)
-curl -sS http://localhost:8000/users/list?user_ids=1 | jq
+curl -sS http://localhost:8000/users/search?str=g013 | jq
 curl -sS http://localhost:8000/events | jq
 
 # Cuentaにログインする(同時にCuenta => Kongへのconsumer登録APIが送信される)
@@ -87,6 +87,9 @@ cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:
 
 # tokenを含めてAldeaにアクセスする
 cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:8000/events | jq
+
+# ログイン中のユーザ取得
+cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:8000/users | jq
 
 # Dios ==============================================================
 
