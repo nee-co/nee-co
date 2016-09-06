@@ -15,7 +15,7 @@ services:
     networks:
       - kong
   kong-application:
-    image: kong:0.9.0
+    image: kong-application
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
@@ -27,6 +27,8 @@ services:
       - kong-database
     volumes_from:
       - kong-datastore
+    volumes:
+      - ./public/:/public/:ro
     networks:
       - kong-cuenta
       - kong-aldea
