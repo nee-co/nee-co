@@ -15,19 +15,21 @@ services:
     networks:
       - kong
   kong-application:
-    image: mashape/kong
+    image: kong-application
     environment:
-      - DATABASE=postgres
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
     ports:
-      - "8000:8000"
-      - "8001:8001"
-      - "8443:8443"
-      - "7946:7946"
-      - "7946:7946/udp"
+      - "8000:8000" # public api http
+      - "80:80"     # pubic image
+      - "8001:8001" # admin api
+      - "8443:8443" # public api https
     depends_on:
       - kong-database
     volumes_from:
       - kong-datastore
+    volumes:
+      - ./public/:/public/:ro
     networks:
       - kong-cuenta
       - kong-aldea
