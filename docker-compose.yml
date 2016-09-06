@@ -15,9 +15,10 @@ services:
     networks:
       - kong
   kong-application:
-    image: mashape/kong
+    image: kong:0.9.0
     environment:
-      - DATABASE=postgres
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
     ports:
       - "8000:8000"
       - "8001:8001"
