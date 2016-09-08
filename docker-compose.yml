@@ -60,10 +60,13 @@ services:
       - CUENTA_DATABASE_USER=root
       - CUENTA_DATABASE_PASSWORD=root
       - CUENTA_KONG_URL=http://kong-application:8001
+      - CUENTA_IMAGE_URL=http://localhost
     depends_on:
       - cuenta-database
     volumes_from:
       - cuenta-datastore
+    volumes:
+      - ./public/images/users/:/app/uploads/images/users/
     networks:
       - kong-cuenta
       - cuenta-aldea
