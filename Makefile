@@ -14,3 +14,6 @@ setup_aldea_db:
 
 setup_dios_db:
 	docker-compose run --rm dios-application bundle exec rails db:setup
+
+import_default_image:
+	docker run --rm -it -v $(PWD)/public/images/users/:/work cuenta-application cp -r /app/uploads/images/users/defaults/ /work/
