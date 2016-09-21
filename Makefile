@@ -1,3 +1,31 @@
+build: kong_build aldea_build cuenta_build dios_build
+
+kong_build:
+	pushd kong/ && make build && popd
+
+aldea_build:
+	pushd projects/aldea/ && make build && popd
+
+cuenta_build:
+	pushd projects/cuenta/ && make build && popd
+
+dios_build:
+	pushd projects/dios/ && make build && popd
+
+dev-build: kong_dev-build aldea_dev-build cuenta_dev-build dios_dev-build
+
+kong_dev-build:
+	pushd kong/ && make dev-build && popd
+
+aldea_dev-build:
+	pushd projects/aldea/ && make dev-build && popd
+
+cuenta_dev-build:
+	pushd projects/cuenta/ && make dev-build && popd
+
+dios_dev-build:
+	pushd projects/dios/ && make dev-build && popd
+
 up_db:
 	docker-compose up -d kong-database cuenta-database aldea-database dios-database
 
