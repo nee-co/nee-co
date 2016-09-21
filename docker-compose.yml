@@ -1,17 +1,13 @@
 version: '2'
 services:
   # Kong
-  kong-datastore:
-    image: busybox
-    volumes:
-      - /var/lib/postgresql/data
   kong-database:
     image: postgres:9.4
     environment:
       - POSTGRES_USER=kong
       - POSTGRES_DB=kong
-    volumes_from:
-      - kong-datastore
+    volumes:
+      - kong:/var/lib/postgresql/data
     networks:
       - kong
   kong-application:
@@ -26,8 +22,6 @@ services:
       - "8443:8443" # public api https
     depends_on:
       - kong-database
-    volumes_from:
-      - kong-datastore
     volumes:
       - ./public/:/public/:ro
     networks:
@@ -36,19 +30,14 @@ services:
       - kong
 
   # Cuenta
-  cuenta-datastore:
-    image: busybox
-    volumes:
-      - /var/lib/mysql
-      - /app/log
   cuenta-database:
     image: mariadb
     environment:
       - MYSQL_ROOT_PASSWORD=root
     ports: # TODO: ダミーデータ挿入のために開けている。頃合い見て閉じる
       - "13306:3306"
-    volumes_from:
-      - cuenta-datastore
+    volumes:
+      - cuenta:/var/lib/mysql
     networks:
       - cuenta
       - dios
@@ -63,8 +52,6 @@ services:
       - CUENTA_IMAGE_URL=http://localhost
     depends_on:
       - cuenta-database
-    volumes_from:
-      - cuenta-datastore
     volumes:
       - ./public/images/users/:/app/uploads/images/users/
     networks:
@@ -73,17 +60,12 @@ services:
       - cuenta
 
   # Aldea
-  aldea-datastore:
-    image: busybox
-    volumes:
-      - /var/lib/mysql
-      - /app/log
   aldea-database:
     image: mariadb
     environment:
       - MYSQL_ROOT_PASSWORD=root
-    volumes_from:
-      - aldea-datastore
+    volumes:
+      - aldea:/var/lib/mysql
     networks:
       - aldea
       - dios
@@ -97,25 +79,18 @@ services:
       - ALDEA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
     depends_on:
       - aldea-database
-    volumes_from:
-      - aldea-datastore
     networks:
       - kong-aldea
       - cuenta-aldea
       - aldea
 
   # Dios
-  dios-datastore:
-    image: busybox
-    volumes:
-      - /var/lib/mysql
-      - /app/log
   dios-database:
     image: mariadb
     environment:
       - MYSQL_ROOT_PASSWORD=root
-    volumes_from:
-      - dios-datastore
+    volumes:
+      - dios:/var/lib/mysql
     networks:
       - dios
   dios-application:
@@ -136,8 +111,6 @@ services:
       - "3000:3000"
     depends_on:
       - dios-database
-    volumes_from:
-      - dios-datastore
     networks:
       - dios
 
@@ -156,3 +129,12 @@ networks:
     driver: bridge
   aldea:
     driver: bridge
+volumes:
+  kong:
+    driver: local
+  aldea:
+    driver: local
+  cuenta:
+    driver: local
+  dios:
+    driver: local
