@@ -7,3 +7,6 @@
 [submodule "projects/dios"]
 	path = projects/dios
 	url = git@bitbucket.org:nhac/dios.git
+[submodule "projects/kong"]
+	path = projects/kong
+	url = git@bitbucket.org:nhac/kong.git
