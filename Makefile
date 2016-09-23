@@ -1,7 +1,7 @@
 build: kong_build aldea_build cuenta_build dios_build
 
 kong_build:
-	pushd kong/ && make build && popd
+	pushd projects/kong/ && make build && popd
 
 aldea_build:
 	pushd projects/aldea/ && make build && popd
@@ -15,7 +15,7 @@ dios_build:
 dev-build: kong_dev-build aldea_dev-build cuenta_dev-build dios_dev-build
 
 kong_dev-build:
-	pushd kong/ && make dev-build && popd
+	pushd projects/kong/ && make dev-build && popd
 
 aldea_dev-build:
 	pushd projects/aldea/ && make dev-build && popd
