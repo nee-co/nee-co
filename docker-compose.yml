@@ -27,6 +27,7 @@ services:
     networks:
       - kong-cuenta
       - kong-aldea
+      - kong-dios
       - kong
 
   # Cuenta
@@ -101,6 +102,7 @@ services:
       - DIOS_DATABASE_USER=root
       - DIOS_DATABASE_PASSWORD=root
       - DIOS_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
+      - DIOS_KONG_URL=http://kong-application:8001
       - CUENTA_DATABASE_HOST=cuenta-database
       - CUENTA_DATABASE_USER=root
       - CUENTA_DATABASE_PASSWORD=root
@@ -112,12 +114,15 @@ services:
     depends_on:
       - dios-database
     networks:
+      - kong-dios
       - dios
 
 networks:
   kong-cuenta:
     driver: bridge
   kong-aldea:
+    driver: bridge
+  kong-dios:
     driver: bridge
   cuenta-aldea:
     driver: bridge
