@@ -60,6 +60,11 @@ curl -sS http://localhost:8001/apis | jq
 # Kong経由でイベントAPIを呼ぶ
 curl -sS http://localhost:8000/events | jq
 
+# CORS ==============================================================
+curl -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta | jq -r '.id')/plugins --data "name=cors"
+curl -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta-auth | jq -r '.id')/plugins --data "name=cors"
+curl -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/aldea | jq -r '.id')/plugins --data "name=cors"
+
 # JWT Plugin ============================================================
 
 # CuentaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
