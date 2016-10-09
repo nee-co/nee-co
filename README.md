@@ -28,10 +28,24 @@
 
 * ~~Nee-co共有レジストリから取得~~ まだ
 * 手元環境でビルド
-    + `make build` キャッシュ不使用(本番用)
-    + `make dev-build` キャッシュ使用(開発用)
+    + `make images` キャッシュ不使用(本番用)
+    + `make dev-images` キャッシュ使用(開発用)
 
 ## 構築手順
+
+### 共通ボリューム・ネットワーク作成
+
+```
+make volumes
+
+make networks
+```
+
+### デフォルトファイルをボリュームに取り込み
+
+```
+make import_default-files
+```
 
 ### コンテナ立ち上げ
 ```
@@ -40,9 +54,6 @@ make up_db
 
 # (初回のみ) DB Migration
 make setup_db
-
-# (初回のみ) ユーザデフォルト画像import
-make import_default_image
 
 # (初回のみ 開発時のみ) ダミーユーザ追加
 mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
