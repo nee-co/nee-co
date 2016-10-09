@@ -1,34 +1,29 @@
 version: '2'
 services:
-  # Kong
-  kong-database:
-    image: postgres:9.4
+  # Aldea
+  aldea-database:
+    image: mariadb
     environment:
-      - POSTGRES_USER=kong
-      - POSTGRES_DB=kong
+      - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - kong:/var/lib/postgresql/data
+      - aldea:/var/lib/mysql
     networks:
-      - kong
-  kong-application:
-    image: kong-application
+      - aldea
+      - dios-aldea
+  aldea-application:
+    image: aldea-application
     environment:
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-database
-    ports:
-      - "8000:8000" # public api http
-      - "80:80"     # pubic image
-      - "8001:8001" # admin api
-      - "8443:8443" # public api https
+      - ALDEA_PORT=3000
+      - ALDEA_DATABASE_HOST=aldea-database
+      - ALDEA_DATABASE_USER=root
+      - ALDEA_DATABASE_PASSWORD=root
+      - ALDEA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
     depends_on:
-      - kong-database
-    volumes:
-      - ./public/:/public/:ro
+      - aldea-database
     networks:
-      - kong-cuenta
+      - aldea
+      - aldea-cuenta
       - kong-aldea
-      - kong-dios
-      - kong
 
   # Cuenta
   cuenta-database:
@@ -41,7 +36,7 @@ services:
       - cuenta:/var/lib/mysql
     networks:
       - cuenta
-      - dios
+      - dios-cuenta
   cuenta-application:
     image: cuenta-application
     environment:
@@ -54,36 +49,11 @@ services:
     depends_on:
       - cuenta-database
     volumes:
-      - ./public/images/users/:/app/uploads/images/users/
+      - public:/app/uploads/
     networks:
-      - kong-cuenta
-      - cuenta-aldea
       - cuenta
-
-  # Aldea
-  aldea-database:
-    image: mariadb
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-    volumes:
-      - aldea:/var/lib/mysql
-    networks:
-      - aldea
-      - dios
-  aldea-application:
-    image: aldea-application
-    environment:
-      - ALDEA_PORT=3000
-      - ALDEA_DATABASE_HOST=aldea-database
-      - ALDEA_DATABASE_USER=root
-      - ALDEA_DATABASE_PASSWORD=root
-      - ALDEA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
-    depends_on:
-      - aldea-database
-    networks:
-      - kong-aldea
-      - cuenta-aldea
-      - aldea
+      - aldea-cuenta
+      - kong-cuenta
 
   # Dios
   dios-database:
@@ -114,32 +84,86 @@ services:
     depends_on:
       - dios-database
     networks:
-      - kong-dios
       - dios
+      - dios-aldea
+      - dios-cuenta
+      - dios-kong
+
+  # Kong
+  kong-database:
+    image: postgres:9.4
+    environment:
+      - POSTGRES_USER=kong
+      - POSTGRES_DB=kong
+    volumes:
+      - kong:/var/lib/postgresql/data
+    networks:
+      - kong
+  kong-application:
+    image: kong-application
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
+    ports:
+      - "8000:8000" # public api http
+      - "80:80"     # pubic image
+      - "8001:8001" # admin api
+      - "8443:8443" # public api https
+    depends_on:
+      - kong-database
+    volumes:
+      - public:/public/:ro
+    networks:
+      - kong
+      - kong-aldea
+      - kong-cuenta
+      - dios-kong
+
+volumes:
+  aldea:
+    external:
+      name: neeco_aldea
+  cuenta:
+    external:
+      name: neeco_cuenta
+  dios:
+    external:
+      name: neeco_dios
+  kong:
+    external:
+      name: neeco_kong
+  public:
+    external:
+      name: neeco_public
 
 networks:
-  kong-cuenta:
-    driver: bridge
+  aldea:
+    external:
+      name: neeco_aldea
+  cuenta:
+    external:
+      name: neeco_cuenta
+  dios:
+    external:
+      name: neeco_dios
+  kong:
+    external:
+      name: neeco_kong
   kong-aldea:
-    driver: bridge
-  kong-dios:
-    driver: bridge
-  cuenta-aldea:
-    driver: bridge
-  kong:
-    driver: bridge
-  dios:
-    driver: bridge
-  cuenta:
-    driver: bridge
-  aldea:
-    driver: bridge
-volumes:
-  kong:
-    driver: local
-  aldea:
-    driver: local
-  cuenta:
-    driver: local
-  dios:
-    driver: local
+    external:
+      name: neeco_kong-aldea
+  kong-cuenta:
+    external:
+      name: neeco_kong-cuenta
+  dios-aldea:
+    external:
+      name: neeco_dios-aldea
+  dios-cuenta:
+    external:
+      name: neeco_dios-cuenta
+  dios-kong:
+    external:
+      name: neeco_dios-kong
+  aldea-cuenta:
+    external:
+      name: neeco_aldea-cuenta
