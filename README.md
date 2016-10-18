@@ -77,14 +77,21 @@ curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=cuenta-auth' --d
 # Aldeaを登録
 curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=aldea' --data 'upstream_url=http://aldea-application:3000' --data 'request_path=/events' | jq
 
+# Cajaを登録
+curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=caja' --data 'upstream_url=http://caja-application:9000' --data 'request_path=/files' | jq
+
 # CORS設定
 curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta | jq -r '.id')/plugins --data "name=cors" | jq
 curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta-auth | jq -r '.id')/plugins --data "name=cors" | jq
 curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/aldea | jq -r '.id')/plugins --data "name=cors" | jq
+curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/caja | jq -r '.id')/plugins --data "name=cors" | jq
 
 # CuentaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
 curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
 
 # AldeaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
 curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/aldea | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
+
+# CajaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
+curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/caja | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
 ```
