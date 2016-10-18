@@ -28,11 +28,11 @@ up_app:
 
 setup_db: setup_aldea-db setup_cuenta-db setup_dios-db;
 setup_aldea-db:
-	docker-compose run --rm aldea-application bundle exec rails db:setup
+	pushd projects/aldea/ && make setup_db && popd
 setup_cuenta-db:
-	docker-compose run --rm cuenta-application mix ecto.setup
+	pushd projects/cuenta/ && make setup_db && popd
 setup_dios-db:
-	docker-compose run --rm dios-application bundle exec rails db:setup
+	pushd projects/dios/ && make setup_db && popd
 
 volumes:
 	@docker volume create --name neeco_aldea || true
