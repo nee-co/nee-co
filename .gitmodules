@@ -10,3 +10,6 @@
 [submodule "projects/kong"]
 	path = projects/kong
 	url = git@bitbucket.org:nhac/kong.git
+[submodule "projects/caja"]
+	path = projects/caja
+	url = git@bitbucket.org:nhac/caja.git
