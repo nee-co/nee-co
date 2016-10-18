@@ -1,6 +1,6 @@
 PHONY: images dev-images up_db up_app setup_db volumes networks import_defualt-files
 
-images: aldea_build cuenta_build dios_build kong_build;
+images: aldea_image cuenta_image dios_image kong_image;
 aldea_image:
 	pushd projects/aldea/ && make image && popd
 cuenta_image:
