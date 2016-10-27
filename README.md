@@ -4,6 +4,7 @@
 
 * 各BEサブシステム統合リポジトリ
 * Kong管理
+* Reverse Proxy
 * ~~ログ集約~~ まだ
 
 ## 使うもの
@@ -59,6 +60,9 @@ mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
 
 # 各アプリ立ち上げ
 make up_app
+
+# リバースプロキシ立ち上げ
+make up_proxy
 ```
 
 ### Kong API登録
