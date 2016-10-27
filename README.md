@@ -23,11 +23,22 @@
 
 * 各サブシステムをGit SubModuleで管理している
 * 初期clone `git clone --recursive git@bitbucket.org:nhac/nee-co.git`
-* 更新 `git submodule update`
+* 更新 `git submodule update --remote`
+
+### List
+
+| システム名 |        概要      |          リポジトリURL            |
+|:----------:|:----------------:|:---------------------------------:|
+|   Aldea    |  イベント管理API | https://bitbucket.org/nhac/aldea  |
+|    Caja    |  ファイル管理API | https://bitbucket.org/nhac/caja   |
+|   Cuenta   |   ユーザ管理API  | https://bitbucket.org/nhac/cuenta |
+|    Dios    | 管理者用システム | https://bitbucket.org/nhac/dios   |
+|    Kong    |    API Gateway   | https://bitbucket.org/nhac/kong   |
+|   Puerta   |   Reverse Proxy  | https://bitbucket.org/nhac/puerta |
 
 ## 各サブシステムのイメージ取得
 
-* ~~Nee-co共有レジストリから取得~~ まだ
+* Nee-co共有レジストリから取得
 * 手元環境でビルド
     + `make images`
 
@@ -67,8 +78,8 @@ make up_proxy
 
 ### Kong API登録
 
-* ~~Dios上で管理~~ まだ
-* 手動登録(API)
+* Dios上で管理
+* 手動登録(API) <= docker-compose.ymlを編集して8001ポートを開ける必要あり
 
 ```
 # Cuentaを登録(ユーザ側)
