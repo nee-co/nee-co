@@ -28,8 +28,7 @@
 
 * ~~Nee-co共有レジストリから取得~~ まだ
 * 手元環境でビルド
-    + `make images` キャッシュ不使用(本番用)
-    + `make dev-images` キャッシュ使用(開発用)
+    + `make images`
 
 ## 構築手順
 

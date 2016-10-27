@@ -1,4 +1,4 @@
-PHONY: images dev-images up_db up_app setup_db volumes networks import_defualt-files
+PHONY: images up_db up_app setup_db volumes networks import_defualt-files
 
 images: aldea_image caja_image cuenta_image dios_image kong_image;
 aldea_image:
@@ -11,18 +11,6 @@ dios_image:
 	pushd projects/dios/ && make image && popd
 kong_image:
 	pushd projects/kong/ && make image && popd
-
-dev-images: aldea_dev-image caja_dev-image cuenta_dev-image dios_dev-image kong_dev-image;
-aldea_dev-image:
-	pushd projects/aldea/ && make dev-image && popd
-caja_dev-image:
-	pushd projects/caja/ && make dev-image && popd
-cuenta_dev-image:
-	pushd projects/cuenta/ && make dev-image && popd
-dios_dev-image:
-	pushd projects/dios/ && make dev-image && popd
-kong_dev-image:
-	pushd projects/kong/ && make dev-image && popd
 
 up_db:
 	docker-compose up -d aldea-database caja-database cuenta-database dios-database kong-database
