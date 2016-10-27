@@ -1,13 +1,3 @@
 .DS_Store
 
 token
-
-/public/*
-!/public/images/
-/public/images/*
-!/public/images/users/
-!/public/images/events/
-/public/images/users/*
-/public/images/events/*
-!/public/images/users/.gitkeep
-!/public/images/events/.gitkeep
