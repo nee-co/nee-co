@@ -13,3 +13,6 @@
 [submodule "projects/caja"]
 	path = projects/caja
 	url = git@bitbucket.org:nhac/caja.git
+[submodule "projects/puerta"]
+	path = projects/puerta
+	url = git@bitbucket.org:nhac/puerta.git
