@@ -122,9 +122,6 @@ cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:
 # ログイン中のユーザ取得
 cat token | xargs -I {} curl -sS -H 'Authorization: Bearer {}' http://localhost:8000/users | jq
 
-# ログイン中のユーザ画像更新
-cat token | xargs -I {} curl -sS -X POST -H 'Authorization: Bearer {}' http://localhost:8000/users/image -F image=@kong.png | jq
-
 # Dios ==============================================================
 
 # DiosDB作成 初回のみ実行する
