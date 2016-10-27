@@ -111,12 +111,11 @@ services:
       - ALDEA_DATABASE_HOST=aldea-database
       - ALDEA_DATABASE_USER=root
       - ALDEA_DATABASE_PASSWORD=root
-    ports:
-      - "3000:3000"
     depends_on:
       - dios-database
     networks:
       - dios
+      - puerta-dios
       - dios-aldea
       - dios-caja
       - dios-cuenta
@@ -137,21 +136,28 @@ services:
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
-    ports:
-      - "8000:8000" # public api http
-      - "80:80"     # pubic image
-      - "8001:8001" # admin api
-      - "8443:8443" # public api https
     depends_on:
       - kong-database
-    volumes:
-      - public:/public/:ro
     networks:
       - kong
+      - puerta-kong
       - kong-aldea
       - kong-caja
       - kong-cuenta
       - dios-kong
+
+  # Puerta
+  puerta:
+    image: puerta
+    ports:
+      - "80:80"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - public:/public/:ro
+    networks:
+      - puerta
+      - puerta-kong
+      - puerta-dios
 
 volumes:
   aldea:
@@ -189,6 +195,15 @@ networks:
   kong:
     external:
       name: neeco_kong
+  puerta:
+    external:
+      name: neeco_puerta
+  puerta-kong:
+    external:
+      name: neeco_puerta-kong
+  puerta-dios:
+    external:
+      name: neeco_puerta-dios
   kong-aldea:
     external:
       name: neeco_kong-aldea

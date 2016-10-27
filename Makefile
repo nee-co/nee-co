@@ -1,4 +1,4 @@
-PHONY: images up_db up_app setup_db volumes networks import_defualt-files
+.PHONY: images up_proxy up_db up_app setup_db volumes networks import_defualt-files cert
 
 images: aldea_image caja_image cuenta_image dios_image kong_image;
 aldea_image:
@@ -11,6 +11,9 @@ dios_image:
 	pushd projects/dios/ && make image && popd
 kong_image:
 	pushd projects/kong/ && make image && popd
+
+up_proxy:
+	docker-compose up -d puerta
 
 up_db:
 	docker-compose up -d aldea-database caja-database cuenta-database dios-database kong-database
@@ -34,12 +37,16 @@ volumes:
 	@docker volume create --name neeco_kong || true
 	@docker volume create --name neeco_public || true
 
-networks: kong-networks dios-networks internal-networks
+networks: puerta-networks kong-networks dios-networks internal-networks
 	@docker network create neeco_aldea || true
 	@docker network create neeco_caja || true
 	@docker network create neeco_cuenta || true
 	@docker network create neeco_dios || true
 	@docker network create neeco_kong || true
+	@docker network create neeco_puerta || true
+puerta-networks:
+	@docker network create --internal neeco_puerta-kong || true
+	@docker network create --internal neeco_puerta-dios || true
 kong-networks:
 	@docker network create --internal neeco_kong-aldea || true
 	@docker network create --internal neeco_kong-caja || true
@@ -55,3 +62,11 @@ internal-networks:
 
 import_default-files: volumes
 	docker run --rm -i -v neeco_public:/work cuenta-application ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
+
+cert:
+	docker run -it --rm \
+  -p 80:80 -p 443:443 \
+  -v /etc/letsencrypt:/etc/letsencrypt \
+  quay.io/letsencrypt/letsencrypt:latest certonly \
+  --standalone --agree-tos -m nhac.neeco@gmail.com \
+  -d neec.ooo -d api.neec.ooo -d admin.neec.ooo
