@@ -58,6 +58,12 @@ make networks
 make import_default-files
 ```
 
+### 証明書作成
+
+```
+make cert
+```
+
 ### コンテナ立ち上げ
 ```
 # DB立ち上げ
