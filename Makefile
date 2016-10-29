@@ -1,6 +1,6 @@
 .PHONY: images up_proxy up_db up_app setup_db volumes networks import_defualt-files cert
 
-images: aldea_image caja_image cuenta_image dios_image kong_image;
+images: aldea_image caja_image cuenta_image dios_image kong_image puerta_image;
 aldea_image:
 	pushd projects/aldea/ && make image && popd
 caja_image:
@@ -11,6 +11,8 @@ dios_image:
 	pushd projects/dios/ && make image && popd
 kong_image:
 	pushd projects/kong/ && make image && popd
+puerta_image:
+	pushd projects/puerta/ && make image && popd
 
 up_proxy:
 	docker-compose up -d puerta
