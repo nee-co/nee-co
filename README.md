@@ -64,6 +64,12 @@ make import_default-files
 make cert
 ```
 
+### htpasswd作成
+
+```
+make htpasswd
+```
+
 ### コンテナ立ち上げ
 ```
 # DB立ち上げ

@@ -153,6 +153,7 @@ services:
     ports:
       - "80:80"
     volumes:
+      - ./.htpasswd:/etc/h2o/.htpasswd:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - public:/public/:ro
     networks:

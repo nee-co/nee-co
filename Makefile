@@ -1,4 +1,4 @@
-.PHONY: images up_proxy up_db up_app setup_db volumes networks import_defualt-files cert
+.PHONY: images up_proxy up_db up_app setup_db volumes networks import_defualt-files cert htpasswd
 
 images: aldea_image caja_image cuenta_image dios_image kong_image puerta_image;
 aldea_image:
@@ -72,3 +72,6 @@ cert:
   quay.io/letsencrypt/letsencrypt:latest certonly \
   --standalone --agree-tos -m nhac.neeco@gmail.com \
   -d neec.ooo -d api.neec.ooo -d admin.neec.ooo
+
+htpasswd:
+	htpasswd -c ./.htpasswd neeco
