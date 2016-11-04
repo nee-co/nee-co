@@ -21,6 +21,8 @@ services:
       - ALDEA_CUENTA_URL=http://cuenta-application:4000
     depends_on:
       - aldea-database
+    volumes:
+      - public:/app/uploads/
     networks:
       - aldea
       - aldea-cuenta
