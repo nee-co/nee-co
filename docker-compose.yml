@@ -19,8 +19,11 @@ services:
       - ALDEA_DATABASE_PASSWORD=root
       - ALDEA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
       - ALDEA_CUENTA_URL=http://cuenta-application:4000
+      - ALDEA_IMAGE_URL=https://static.neec.ooo
     depends_on:
       - aldea-database
+    volumes:
+      - public:/app/uploads/
     networks:
       - aldea
       - aldea-cuenta
