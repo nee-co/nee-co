@@ -155,6 +155,7 @@ services:
     image: puerta
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./.htpasswd:/etc/h2o/.htpasswd:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
