@@ -47,6 +47,7 @@ networks: puerta-networks kong-networks dios-networks internal-networks
 	@docker network create neeco_kong || true
 	@docker network create neeco_puerta || true
 puerta-networks:
+	@docker network create --internal neeco_puerta-web || true
 	@docker network create --internal neeco_puerta-kong || true
 	@docker network create --internal neeco_puerta-dios || true
 kong-networks:

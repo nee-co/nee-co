@@ -162,6 +162,7 @@ services:
       - public:/public/:ro
     networks:
       - puerta
+      - puerta-web
       - puerta-kong
       - puerta-dios
 
@@ -204,6 +205,9 @@ networks:
   puerta:
     external:
       name: neeco_puerta
+  puerta-web:
+    external:
+      name: neeco_puerta-web
   puerta-kong:
     external:
       name: neeco_puerta-kong
