@@ -80,7 +80,7 @@ services:
       - CUENTA_DATABASE_USER=root
       - CUENTA_DATABASE_PASSWORD=root
       - CUENTA_KONG_URL=http://kong-application:8001
-      - CUENTA_IMAGE_URL=https://neec.ooo
+      - CUENTA_IMAGE_URL=https://static.neec.ooo
     depends_on:
       - cuenta-database
     volumes:
