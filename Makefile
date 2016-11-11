@@ -1,10 +1,8 @@
 .PHONY: images up_proxy up_db up_app setup_db volumes networks import_defualt-files cert htpasswd
 
-images: aldea_image caja_image cuenta_image dios_image kong_image puerta_image;
+images: aldea_image cuenta_image dios_image kong_image puerta_image;
 aldea_image:
 	pushd projects/aldea/ && make image && popd
-caja_image:
-	pushd projects/caja/ && make image && popd
 cuenta_image:
 	pushd projects/cuenta/ && make image && popd
 dios_image:
@@ -18,10 +16,10 @@ up_proxy:
 	docker-compose up -d puerta
 
 up_db:
-	docker-compose up -d aldea-database caja-database cuenta-database dios-database kong-database
+	docker-compose up -d aldea-database cuenta-database dios-database kong-database
 
 up_app:
-	docker-compose up -d aldea-application caja-application cuenta-application dios-application kong-application
+	docker-compose up -d aldea-application cuenta-application dios-application kong-application
 
 setup_db: setup_aldea-db setup_cuenta-db setup_dios-db;
 setup_aldea-db:
