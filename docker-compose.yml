@@ -11,7 +11,7 @@ services:
       - aldea
       - dios-aldea
   aldea-application:
-    image: aldea-application
+    image: registry.neec.xyz/neeco/aldea-application:latest
     environment:
       - ALDEA_PORT=3000
       - ALDEA_DATABASE_HOST=aldea-database
@@ -41,7 +41,7 @@ services:
       - caja
       - dios-caja
   caja-application:
-    image: caja-application
+    image: registry.neec.xyz/neeco/caja-application:latest
     environment:
       - CAJA_PORT=9000
       - CAJA_DATABASE_HOST=caja-database
@@ -73,7 +73,7 @@ services:
       - cuenta
       - dios-cuenta
   cuenta-application:
-    image: cuenta-application
+    image: registry.neec.xyz/neeco/cuenta-application:latest
     environment:
       - CUENTA_PORT=4000
       - CUENTA_DATABASE_HOST=cuenta-database
@@ -101,7 +101,7 @@ services:
     networks:
       - dios
   dios-application:
-    image: dios-application
+    image: registry.neec.xyz/neeco/dios-application:latest
     environment:
       - DIOS_PORT=3000
       - DIOS_DATABASE_HOST=dios-database
@@ -136,7 +136,7 @@ services:
     networks:
       - kong
   kong-application:
-    image: kong-application
+    image: registry.neec.xyz/neeco/kong-application:latest
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
@@ -152,7 +152,7 @@ services:
 
   # Puerta
   puerta:
-    image: puerta
+    image: registry.neec.xyz/neeco/puerta:latest
     ports:
       - "80:80"
       - "443:443"
