@@ -2,7 +2,7 @@ version: '2'
 services:
   # Aldea
   aldea-database:
-    image: mariadb
+    image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
@@ -31,7 +31,7 @@ services:
 
   # Caja
   caja-database:
-    image: mariadb
+    image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=caja_production
@@ -62,7 +62,7 @@ services:
 
   # Cuenta
   cuenta-database:
-    image: mariadb
+    image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=root
     ports: # TODO: ダミーデータ挿入のために開けている。頃合い見て閉じる
@@ -93,7 +93,7 @@ services:
 
   # Dios
   dios-database:
-    image: mariadb
+    image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
