@@ -29,37 +29,6 @@ services:
       - aldea-cuenta
       - kong-aldea
 
-  # Caja
-  caja-database:
-    image: mariadb:10.1
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=caja_production
-    volumes:
-      - caja:/var/lib/mysql
-    networks:
-      - caja
-      - dios-caja
-  caja-application:
-    image: registry.neec.xyz/neeco/caja-application:latest
-    environment:
-      - CAJA_PORT=9000
-      - CAJA_DATABASE_HOST=caja-database
-      - CAJA_DATABASE_USER=root
-      - CAJA_DATABASE_PASSWORD=root
-      - CAJA_DATABASE_PORT=3306
-      - CAJA_S3_ACCESSKEY=FIXME
-      - CAJA_S3_SECRETKEY=FIXME
-      - CAJA_S3_BUCKETNAME=FIXME
-      - CAJA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
-      - CUENTA_URL=http://cuenta-application:4000
-    depends_on:
-      - caja-database
-    networks:
-      - caja
-      - caja-cuenta
-      - kong-caja
-
   # Cuenta
   cuenta-database:
     image: mariadb:10.1
@@ -88,7 +57,6 @@ services:
     networks:
       - cuenta
       - aldea-cuenta
-      - caja-cuenta
       - kong-cuenta
 
   # Dios
@@ -121,7 +89,6 @@ services:
       - dios
       - puerta-dios
       - dios-aldea
-      - dios-caja
       - dios-cuenta
       - dios-kong
 
@@ -146,7 +113,6 @@ services:
       - kong
       - puerta-kong
       - kong-aldea
-      - kong-caja
       - kong-cuenta
       - dios-kong
 
@@ -170,9 +136,6 @@ volumes:
   aldea:
     external:
       name: neeco_aldea
-  caja:
-    external:
-      name: neeco_caja
   cuenta:
     external:
       name: neeco_cuenta
@@ -190,9 +153,6 @@ networks:
   aldea:
     external:
       name: neeco_aldea
-  caja:
-    external:
-      name: neeco_caja
   cuenta:
     external:
       name: neeco_cuenta
@@ -217,18 +177,12 @@ networks:
   kong-aldea:
     external:
       name: neeco_kong-aldea
-  kong-caja:
-    external:
-      name: neeco_kong-caja
   kong-cuenta:
     external:
       name: neeco_kong-cuenta
   dios-aldea:
     external:
       name: neeco_dios-aldea
-  dios-caja:
-    external:
-      name: neeco_dios-caja
   dios-cuenta:
     external:
       name: neeco_dios-cuenta
@@ -238,6 +192,3 @@ networks:
   aldea-cuenta:
     external:
       name: neeco_aldea-cuenta
-  caja-cuenta:
-    external:
-      name: neeco_caja-cuenta

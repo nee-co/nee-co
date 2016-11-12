@@ -31,7 +31,6 @@ setup_dios-db:
 
 volumes:
 	@docker volume create --name neeco_aldea || true
-	@docker volume create --name neeco_caja || true
 	@docker volume create --name neeco_cuenta || true
 	@docker volume create --name neeco_dios || true
 	@docker volume create --name neeco_kong || true
@@ -39,7 +38,6 @@ volumes:
 
 networks: puerta-networks kong-networks dios-networks internal-networks
 	@docker network create neeco_aldea || true
-	@docker network create neeco_caja || true
 	@docker network create neeco_cuenta || true
 	@docker network create neeco_dios || true
 	@docker network create neeco_kong || true
@@ -50,16 +48,13 @@ puerta-networks:
 	@docker network create --internal neeco_puerta-dios || true
 kong-networks:
 	@docker network create --internal neeco_kong-aldea || true
-	@docker network create --internal neeco_kong-caja || true
 	@docker network create --internal neeco_kong-cuenta || true
 dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
-	@docker network create --internal neeco_dios-caja || true
 	@docker network create --internal neeco_dios-cuenta || true
 	@docker network create --internal neeco_dios-kong || true
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
-	@docker network create --internal neeco_caja-cuenta || true
 
 import_default-files: volumes
 	docker run --rm -i -v neeco_public:/work cuenta-application ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
