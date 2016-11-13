@@ -1,4 +1,4 @@
-.PHONY: proxy db app migrate volumes networks import_defualt-files cert htpasswd
+.PHONY: proxy db app seed migrate volumes networks import_defualt-files cert htpasswd
 
 proxy:
 	docker-compose up -d puerta
@@ -8,6 +8,14 @@ db:
 
 app:
 	docker-compose up -d aldea-application cuenta-application dios-application kong-application
+
+seed: seed-aldea seed-cuenta seed-dios;
+seed-aldea:
+	docker-compose run --rm aldea-application bundle exec rails db:seed
+seed-cuenta:
+	docker-compose run --rm cuenta-application mix ecto.seed
+seed-dios:
+	docker-compose run --rm dios-application bundle exec rails db:seed
 
 migrate: migrate-aldea migrate-cuenta migrate-dios;
 migrate-aldea:

@@ -82,6 +82,9 @@ make db
 # DB Migration
 make migrate
 
+# (初回のみ) シード投入
+make seed
+
 # (初回のみ 開発時のみ) ダミーユーザ追加
 mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
 
