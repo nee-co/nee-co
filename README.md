@@ -39,8 +39,12 @@
 ## 各サブシステムのイメージ取得
 
 * Nee-co共有レジストリから取得
-* 手元環境でビルド
-    + `make images`
+
+例)
+
+```
+docker pull registry.neec.xyz/neeco/aldea-application:latest
+```
 
 ## 構築手順
 

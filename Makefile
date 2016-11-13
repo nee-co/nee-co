@@ -1,16 +1,4 @@
-.PHONY: images up_proxy up_db up_app migrate volumes networks import_defualt-files cert htpasswd
-
-images: aldea_image cuenta_image dios_image kong_image puerta_image;
-aldea_image:
-	pushd projects/aldea/ && make image && popd
-cuenta_image:
-	pushd projects/cuenta/ && make image && popd
-dios_image:
-	pushd projects/dios/ && make image && popd
-kong_image:
-	pushd projects/kong/ && make image && popd
-puerta_image:
-	pushd projects/puerta/ && make image && popd
+.PHONY: up_proxy up_db up_app migrate volumes networks import_defualt-files cert htpasswd
 
 up_proxy:
 	docker-compose up -d puerta
