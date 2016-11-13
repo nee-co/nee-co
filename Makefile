@@ -57,8 +57,8 @@ internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
 
 import_default-files: volumes
-	docker run --rm -i -v neeco_public:/work cuenta-application ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
-	docker run --rm -i -v neeco_public:/work aldea-application ash -c "cd /app/uploads/ && cp -r --parents images/events/default.png /work/"
+	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/cuenta-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
+	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/aldea-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/events/default.png /work/"
 
 cert:
 	docker run -it --rm \
