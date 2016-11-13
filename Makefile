@@ -1,37 +1,32 @@
-.PHONY: images up_proxy up_db up_app setup_db volumes networks import_defualt-files cert htpasswd
+.PHONY: proxy db app seed migrate volumes networks import_defualt-files cert htpasswd
 
-images: aldea_image cuenta_image dios_image kong_image puerta_image;
-aldea_image:
-	pushd projects/aldea/ && make image && popd
-cuenta_image:
-	pushd projects/cuenta/ && make image && popd
-dios_image:
-	pushd projects/dios/ && make image && popd
-kong_image:
-	pushd projects/kong/ && make image && popd
-puerta_image:
-	pushd projects/puerta/ && make image && popd
-
-up_proxy:
+proxy:
 	docker-compose up -d puerta
 
-up_db:
+db:
 	docker-compose up -d aldea-database cuenta-database dios-database kong-database
 
-up_app:
+app:
 	docker-compose up -d aldea-application cuenta-application dios-application kong-application
 
-setup_db: setup_aldea-db setup_cuenta-db setup_dios-db;
-setup_aldea-db:
-	pushd projects/aldea/ && make setup_db && popd
-setup_cuenta-db:
-	pushd projects/cuenta/ && make setup_db && popd
-setup_dios-db:
-	pushd projects/dios/ && make setup_db && popd
+seed: seed-aldea seed-cuenta seed-dios;
+seed-aldea:
+	docker-compose run --rm aldea-application bundle exec rails db:seed
+seed-cuenta:
+	docker-compose run --rm cuenta-application mix ecto.seed
+seed-dios:
+	docker-compose run --rm dios-application bundle exec rails db:seed
+
+migrate: migrate-aldea migrate-cuenta migrate-dios;
+migrate-aldea:
+	docker-compose run --rm aldea-application bundle exec rails db:migrate
+migrate-cuenta:
+	docker-compose run --rm cuenta-application mix ecto.migrate
+migrate-dios:
+	docker-compose run --rm dios-application bundle exec rails db:migrate
 
 volumes:
 	@docker volume create --name neeco_aldea || true
-	@docker volume create --name neeco_caja || true
 	@docker volume create --name neeco_cuenta || true
 	@docker volume create --name neeco_dios || true
 	@docker volume create --name neeco_kong || true
@@ -39,7 +34,6 @@ volumes:
 
 networks: puerta-networks kong-networks dios-networks internal-networks
 	@docker network create neeco_aldea || true
-	@docker network create neeco_caja || true
 	@docker network create neeco_cuenta || true
 	@docker network create neeco_dios || true
 	@docker network create neeco_kong || true
@@ -50,20 +44,17 @@ puerta-networks:
 	@docker network create --internal neeco_puerta-dios || true
 kong-networks:
 	@docker network create --internal neeco_kong-aldea || true
-	@docker network create --internal neeco_kong-caja || true
 	@docker network create --internal neeco_kong-cuenta || true
 dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
-	@docker network create --internal neeco_dios-caja || true
 	@docker network create --internal neeco_dios-cuenta || true
 	@docker network create --internal neeco_dios-kong || true
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
-	@docker network create --internal neeco_caja-cuenta || true
 
 import_default-files: volumes
-	docker run --rm -i -v neeco_public:/work cuenta-application ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
-	docker run --rm -i -v neeco_public:/work aldea-application ash -c "cd /app/uploads/ && cp -r --parents images/events/default.png /work/"
+	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/cuenta-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
+	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/aldea-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/events/default.png /work/"
 
 cert:
 	docker run -it --rm \

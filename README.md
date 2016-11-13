@@ -19,13 +19,7 @@
 
 ---
 
-## SubModule
-
-* 各サブシステムをGit SubModuleで管理している
-* 初期clone `git clone --recursive git@bitbucket.org:nhac/nee-co.git`
-* 更新 `git submodule update --remote`
-
-### List
+## サブシステム
 
 | システム名 |        概要      |          リポジトリURL            |
 |:----------:|:----------------:|:---------------------------------:|
@@ -39,8 +33,12 @@
 ## 各サブシステムのイメージ取得
 
 * Nee-co共有レジストリから取得
-* 手元環境でビルド
-    + `make images`
+
+例)
+
+```
+docker pull registry.neec.xyz/neeco/aldea-application:latest
+```
 
 ## 構築手順
 
@@ -50,6 +48,12 @@
 make volumes
 
 make networks
+```
+
+### 環境変数設定(必要に応じて適宜変更)
+
+```
+cp .env{.example,}
 ```
 
 ### デフォルトファイルをボリュームに取り込み
@@ -73,51 +77,24 @@ make htpasswd
 ### コンテナ立ち上げ
 ```
 # DB立ち上げ
-make up_db
+make db
 
-# (初回のみ) DB Migration
-make setup_db
+# DB Migration
+make migrate
 
-# (初回のみ 開発時のみ) ダミーユーザ追加
-mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
+# (初回のみ) シード投入
+make seed
+
+# (初回のみ 開発時のみ) ダミーユーザ追加 ユーザ/パスワードは環境に合わせて適宜変更すること
+mysql -u cuenta -p -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
 
 # 各アプリ立ち上げ
-make up_app
+make app
 
 # リバースプロキシ立ち上げ
-make up_proxy
+make proxy
 ```
 
 ### Kong API登録
 
 * Dios上で管理
-* 手動登録(API) <= docker-compose.ymlを編集して8001ポートを開ける必要あり
-
-```
-# Cuentaを登録(ユーザ側)
-curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=cuenta' --data 'upstream_url=http://cuenta-application:4000' --data 'request_path=/users' | jq
-
-# Cuentaを登録(認証側)
-curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=cuenta-auth' --data 'upstream_url=http://cuenta-application:4000' --data 'request_path=/auth' | jq
-
-# Aldeaを登録
-curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=aldea' --data 'upstream_url=http://aldea-application:3000' --data 'request_path=/events' | jq
-
-# Cajaを登録
-curl -sS -X POST --url http://localhost:8001/apis/ --data 'name=caja' --data 'upstream_url=http://caja-application:9000' --data 'request_path=/files' | jq
-
-# CORS設定
-curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta | jq -r '.id')/plugins --data "name=cors" | jq
-curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta-auth | jq -r '.id')/plugins --data "name=cors" | jq
-curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/aldea | jq -r '.id')/plugins --data "name=cors" | jq
-curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/caja | jq -r '.id')/plugins --data "name=cors" | jq
-
-# CuentaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
-curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/cuenta | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
-
-# AldeaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
-curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/aldea | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
-
-# CajaにJWT認証を登録(これを登録するとAPI curlに認証が必要になるため注意)
-curl -sS -X POST http://localhost:8001/apis/$(curl -s http://localhost:8001/apis/caja | jq -r '.id')/plugins --data "name=jwt" --data "config.claims_to_verify=exp" | jq
-```

@@ -2,24 +2,28 @@ version: '2'
 services:
   # Aldea
   aldea-database:
-    image: mariadb
+    image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_DATABASE: aldea_production
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $ALDEA_DATABASE_USER
+      MYSQL_PASSWORD: $ALDEA_DATABASE_PASSWORD
     volumes:
       - aldea:/var/lib/mysql
     networks:
       - aldea
       - dios-aldea
   aldea-application:
-    image: aldea-application
+    image: registry.neec.xyz/neeco/aldea-application:latest
     environment:
-      - ALDEA_PORT=3000
-      - ALDEA_DATABASE_HOST=aldea-database
-      - ALDEA_DATABASE_USER=root
-      - ALDEA_DATABASE_PASSWORD=root
-      - ALDEA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
-      - ALDEA_CUENTA_URL=http://cuenta-application:4000
-      - ALDEA_IMAGE_URL=https://static.neec.ooo
+      ALDEA_PORT: 3000
+      ALDEA_DATABASE_HOST: aldea-database
+      ALDEA_DATABASE_USER:
+      ALDEA_DATABASE_PASSWORD:
+      ALDEA_SECRET_KEY_BASE:
+      ALDEA_CUENTA_URL: http://cuenta-application:4000
+      ALDEA_IMAGE_URL: https://static.neec.ooo
     depends_on:
       - aldea-database
     volumes:
@@ -29,42 +33,15 @@ services:
       - aldea-cuenta
       - kong-aldea
 
-  # Caja
-  caja-database:
-    image: mariadb
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=caja_production
-    volumes:
-      - caja:/var/lib/mysql
-    networks:
-      - caja
-      - dios-caja
-  caja-application:
-    image: caja-application
-    environment:
-      - CAJA_PORT=9000
-      - CAJA_DATABASE_HOST=caja-database
-      - CAJA_DATABASE_USER=root
-      - CAJA_DATABASE_PASSWORD=root
-      - CAJA_DATABASE_PORT=3306
-      - CAJA_S3_ACCESSKEY=FIXME
-      - CAJA_S3_SECRETKEY=FIXME
-      - CAJA_S3_BUCKETNAME=FIXME
-      - CAJA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
-      - CUENTA_URL=http://cuenta-application:4000
-    depends_on:
-      - caja-database
-    networks:
-      - caja
-      - caja-cuenta
-      - kong-caja
-
   # Cuenta
   cuenta-database:
-    image: mariadb
+    image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_DATABASE: cuenta_prod
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $CUENTA_DATABASE_USER
+      MYSQL_PASSWORD: $CUENTA_DATABASE_PASSWORD
     ports: # TODO: ダミーデータ挿入のために開けている。頃合い見て閉じる
       - "13306:3306"
     volumes:
@@ -73,14 +50,14 @@ services:
       - cuenta
       - dios-cuenta
   cuenta-application:
-    image: cuenta-application
+    image: registry.neec.xyz/neeco/cuenta-application:latest
     environment:
-      - CUENTA_PORT=4000
-      - CUENTA_DATABASE_HOST=cuenta-database
-      - CUENTA_DATABASE_USER=root
-      - CUENTA_DATABASE_PASSWORD=root
-      - CUENTA_KONG_URL=http://kong-application:8001
-      - CUENTA_IMAGE_URL=https://static.neec.ooo
+      CUENTA_PORT: 4000
+      CUENTA_DATABASE_HOST: cuenta-database
+      CUENTA_DATABASE_USER:
+      CUENTA_DATABASE_PASSWORD:
+      CUENTA_KONG_URL: http://kong-application:8001
+      CUENTA_IMAGE_URL: https://static.neec.ooo
     depends_on:
       - cuenta-database
     volumes:
@@ -88,40 +65,42 @@ services:
     networks:
       - cuenta
       - aldea-cuenta
-      - caja-cuenta
       - kong-cuenta
 
   # Dios
   dios-database:
-    image: mariadb
+    image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_DATABASE: dios_production
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $DIOS_DATABASE_USER
+      MYSQL_PASSWORD: $DIOS_DATABASE_PASSWORD
     volumes:
       - dios:/var/lib/mysql
     networks:
       - dios
   dios-application:
-    image: dios-application
+    image: registry.neec.xyz/neeco/dios-application:latest
     environment:
-      - DIOS_PORT=3000
-      - DIOS_DATABASE_HOST=dios-database
-      - DIOS_DATABASE_USER=root
-      - DIOS_DATABASE_PASSWORD=root
-      - DIOS_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
-      - DIOS_KONG_URL=http://kong-application:8001
-      - CUENTA_DATABASE_HOST=cuenta-database
-      - CUENTA_DATABASE_USER=root
-      - CUENTA_DATABASE_PASSWORD=root
-      - ALDEA_DATABASE_HOST=aldea-database
-      - ALDEA_DATABASE_USER=root
-      - ALDEA_DATABASE_PASSWORD=root
+      DIOS_PORT: 3000
+      DIOS_DATABASE_HOST: dios-database
+      DIOS_DATABASE_USER:
+      DIOS_DATABASE_PASSWORD:
+      DIOS_SECRET_KEY_BASE:
+      DIOS_KONG_URL: http://kong-application:8001
+      CUENTA_DATABASE_HOST: cuenta-database
+      CUENTA_DATABASE_USER:
+      CUENTA_DATABASE_PASSWORD:
+      ALDEA_DATABASE_HOST: aldea-database
+      ALDEA_DATABASE_USER:
+      ALDEA_DATABASE_PASSWORD:
     depends_on:
       - dios-database
     networks:
       - dios
       - puerta-dios
       - dios-aldea
-      - dios-caja
       - dios-cuenta
       - dios-kong
 
@@ -129,30 +108,29 @@ services:
   kong-database:
     image: postgres:9.4
     environment:
-      - POSTGRES_USER=kong
-      - POSTGRES_DB=kong
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
     volumes:
       - kong:/var/lib/postgresql/data
     networks:
       - kong
   kong-application:
-    image: kong-application
+    image: registry.neec.xyz/neeco/kong-application:latest
     environment:
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-database
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
     depends_on:
       - kong-database
     networks:
       - kong
       - puerta-kong
       - kong-aldea
-      - kong-caja
       - kong-cuenta
       - dios-kong
 
   # Puerta
   puerta:
-    image: puerta
+    image: registry.neec.xyz/neeco/puerta:latest
     ports:
       - "80:80"
       - "443:443"
@@ -170,9 +148,6 @@ volumes:
   aldea:
     external:
       name: neeco_aldea
-  caja:
-    external:
-      name: neeco_caja
   cuenta:
     external:
       name: neeco_cuenta
@@ -190,9 +165,6 @@ networks:
   aldea:
     external:
       name: neeco_aldea
-  caja:
-    external:
-      name: neeco_caja
   cuenta:
     external:
       name: neeco_cuenta
@@ -217,18 +189,12 @@ networks:
   kong-aldea:
     external:
       name: neeco_kong-aldea
-  kong-caja:
-    external:
-      name: neeco_kong-caja
   kong-cuenta:
     external:
       name: neeco_kong-cuenta
   dios-aldea:
     external:
       name: neeco_dios-aldea
-  dios-caja:
-    external:
-      name: neeco_dios-caja
   dios-cuenta:
     external:
       name: neeco_dios-cuenta
@@ -238,6 +204,3 @@ networks:
   aldea-cuenta:
     external:
       name: neeco_aldea-cuenta
-  caja-cuenta:
-    external:
-      name: neeco_caja-cuenta
