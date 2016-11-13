@@ -77,7 +77,7 @@ make htpasswd
 ### コンテナ立ち上げ
 ```
 # DB立ち上げ
-make up_db
+make db
 
 # DB Migration
 make migrate
@@ -86,10 +86,10 @@ make migrate
 mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
 
 # 各アプリ立ち上げ
-make up_app
+make app
 
 # リバースプロキシ立ち上げ
-make up_proxy
+make proxy
 ```
 
 ### Kong API登録

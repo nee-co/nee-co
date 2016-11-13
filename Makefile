@@ -1,12 +1,12 @@
-.PHONY: up_proxy up_db up_app migrate volumes networks import_defualt-files cert htpasswd
+.PHONY: proxy db app migrate volumes networks import_defualt-files cert htpasswd
 
-up_proxy:
+proxy:
 	docker-compose up -d puerta
 
-up_db:
+db:
 	docker-compose up -d aldea-database cuenta-database dios-database kong-database
 
-up_app:
+app:
 	docker-compose up -d aldea-application cuenta-application dios-application kong-application
 
 migrate: migrate-aldea migrate-cuenta migrate-dios;
