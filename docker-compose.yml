@@ -3,6 +3,7 @@ services:
   # Aldea
   aldea-database:
     image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=aldea_production
@@ -33,6 +34,7 @@ services:
   # Cuenta
   cuenta-database:
     image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=cuenta_prod
@@ -64,6 +66,7 @@ services:
   # Dios
   dios-database:
     image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=dios_production
