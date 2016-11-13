@@ -19,13 +19,7 @@
 
 ---
 
-## SubModule
-
-* 各サブシステムをGit SubModuleで管理している
-* 初期clone `git clone --recursive git@bitbucket.org:nhac/nee-co.git`
-* 更新 `git submodule update --remote`
-
-### List
+## サブシステム
 
 | システム名 |        概要      |          リポジトリURL            |
 |:----------:|:----------------:|:---------------------------------:|
