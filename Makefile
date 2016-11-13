@@ -1,4 +1,4 @@
-.PHONY: images up_proxy up_db up_app setup_db volumes networks import_defualt-files cert htpasswd
+.PHONY: images up_proxy up_db up_app migrate volumes networks import_defualt-files cert htpasswd
 
 images: aldea_image cuenta_image dios_image kong_image puerta_image;
 aldea_image:
@@ -21,13 +21,13 @@ up_db:
 up_app:
 	docker-compose up -d aldea-application cuenta-application dios-application kong-application
 
-setup_db: setup_aldea-db setup_cuenta-db setup_dios-db;
-setup_aldea-db:
-	pushd projects/aldea/ && make setup_db && popd
-setup_cuenta-db:
-	pushd projects/cuenta/ && make setup_db && popd
-setup_dios-db:
-	pushd projects/dios/ && make setup_db && popd
+migrate: migrate-aldea migrate-cuenta migrate-dios;
+migrate-aldea:
+	docker-compose run --rm aldea-application bundle exec rails db:migrate
+migrate-cuenta:
+	docker-compose run --rm cuenta-application mix ecto.migrate
+migrate-dios:
+	docker-compose run --rm dios-application bundle exec rails db:migrate
 
 volumes:
 	@docker volume create --name neeco_aldea || true

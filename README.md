@@ -75,8 +75,8 @@ make htpasswd
 # DB立ち上げ
 make up_db
 
-# (初回のみ) DB Migration
-make setup_db
+# DB Migration
+make migrate
 
 # (初回のみ 開発時のみ) ダミーユーザ追加
 mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql

@@ -5,6 +5,7 @@ services:
     image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=aldea_production
     volumes:
       - aldea:/var/lib/mysql
     networks:
@@ -34,6 +35,7 @@ services:
     image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=cuenta_prod
     ports: # TODO: ダミーデータ挿入のために開けている。頃合い見て閉じる
       - "13306:3306"
     volumes:
@@ -64,6 +66,7 @@ services:
     image: mariadb:10.1
     environment:
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=dios_production
     volumes:
       - dios:/var/lib/mysql
     networks:
