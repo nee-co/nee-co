@@ -50,6 +50,12 @@ make volumes
 make networks
 ```
 
+### 環境変数設定(必要に応じて適宜変更)
+
+```
+cp .env{.example,}
+```
+
 ### デフォルトファイルをボリュームに取り込み
 
 ```
@@ -79,8 +85,8 @@ make migrate
 # (初回のみ) シード投入
 make seed
 
-# (初回のみ 開発時のみ) ダミーユーザ追加
-mysql -uroot -proot -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
+# (初回のみ 開発時のみ) ダミーユーザ追加 ユーザ/パスワードは環境に合わせて適宜変更すること
+mysql -u cuenta -p -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
 
 # 各アプリ立ち上げ
 make app
