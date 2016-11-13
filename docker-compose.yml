@@ -5,8 +5,10 @@ services:
     image: mariadb:10.1
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=aldea_production
+      MYSQL_DATABASE: aldea_production
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $ALDEA_DATABASE_USER
+      MYSQL_PASSWORD: $ALDEA_DATABASE_PASSWORD
     volumes:
       - aldea:/var/lib/mysql
     networks:
@@ -15,13 +17,13 @@ services:
   aldea-application:
     image: registry.neec.xyz/neeco/aldea-application:latest
     environment:
-      - ALDEA_PORT=3000
-      - ALDEA_DATABASE_HOST=aldea-database
-      - ALDEA_DATABASE_USER=root
-      - ALDEA_DATABASE_PASSWORD=root
-      - ALDEA_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
-      - ALDEA_CUENTA_URL=http://cuenta-application:4000
-      - ALDEA_IMAGE_URL=https://static.neec.ooo
+      ALDEA_PORT: 3000
+      ALDEA_DATABASE_HOST: aldea-database
+      ALDEA_DATABASE_USER:
+      ALDEA_DATABASE_PASSWORD:
+      ALDEA_SECRET_KEY_BASE:
+      ALDEA_CUENTA_URL: http://cuenta-application:4000
+      ALDEA_IMAGE_URL: https://static.neec.ooo
     depends_on:
       - aldea-database
     volumes:
@@ -36,8 +38,10 @@ services:
     image: mariadb:10.1
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=cuenta_prod
+      MYSQL_DATABASE: cuenta_prod
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $CUENTA_DATABASE_USER
+      MYSQL_PASSWORD: $CUENTA_DATABASE_PASSWORD
     ports: # TODO: ダミーデータ挿入のために開けている。頃合い見て閉じる
       - "13306:3306"
     volumes:
@@ -48,12 +52,12 @@ services:
   cuenta-application:
     image: registry.neec.xyz/neeco/cuenta-application:latest
     environment:
-      - CUENTA_PORT=4000
-      - CUENTA_DATABASE_HOST=cuenta-database
-      - CUENTA_DATABASE_USER=root
-      - CUENTA_DATABASE_PASSWORD=root
-      - CUENTA_KONG_URL=http://kong-application:8001
-      - CUENTA_IMAGE_URL=https://static.neec.ooo
+      CUENTA_PORT: 4000
+      CUENTA_DATABASE_HOST: cuenta-database
+      CUENTA_DATABASE_USER:
+      CUENTA_DATABASE_PASSWORD:
+      CUENTA_KONG_URL: http://kong-application:8001
+      CUENTA_IMAGE_URL: https://static.neec.ooo
     depends_on:
       - cuenta-database
     volumes:
@@ -68,8 +72,10 @@ services:
     image: mariadb:10.1
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=dios_production
+      MYSQL_DATABASE: dios_production
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $DIOS_DATABASE_USER
+      MYSQL_PASSWORD: $DIOS_DATABASE_PASSWORD
     volumes:
       - dios:/var/lib/mysql
     networks:
@@ -77,18 +83,18 @@ services:
   dios-application:
     image: registry.neec.xyz/neeco/dios-application:latest
     environment:
-      - DIOS_PORT=3000
-      - DIOS_DATABASE_HOST=dios-database
-      - DIOS_DATABASE_USER=root
-      - DIOS_DATABASE_PASSWORD=root
-      - DIOS_SECRET_KEY_BASE=1f0bef8714009078799cf781b489f5012c625a12dc4478388634af4b784b72c5bd1e3f2630a361af351cfaf5bf84559f818b2796b9fcbc331cfa404a3805cb6f
-      - DIOS_KONG_URL=http://kong-application:8001
-      - CUENTA_DATABASE_HOST=cuenta-database
-      - CUENTA_DATABASE_USER=root
-      - CUENTA_DATABASE_PASSWORD=root
-      - ALDEA_DATABASE_HOST=aldea-database
-      - ALDEA_DATABASE_USER=root
-      - ALDEA_DATABASE_PASSWORD=root
+      DIOS_PORT: 3000
+      DIOS_DATABASE_HOST: dios-database
+      DIOS_DATABASE_USER:
+      DIOS_DATABASE_PASSWORD:
+      DIOS_SECRET_KEY_BASE:
+      DIOS_KONG_URL: http://kong-application:8001
+      CUENTA_DATABASE_HOST: cuenta-database
+      CUENTA_DATABASE_USER:
+      CUENTA_DATABASE_PASSWORD:
+      ALDEA_DATABASE_HOST: aldea-database
+      ALDEA_DATABASE_USER:
+      ALDEA_DATABASE_PASSWORD:
     depends_on:
       - dios-database
     networks:
@@ -102,8 +108,8 @@ services:
   kong-database:
     image: postgres:9.4
     environment:
-      - POSTGRES_USER=kong
-      - POSTGRES_DB=kong
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
     volumes:
       - kong:/var/lib/postgresql/data
     networks:
@@ -111,8 +117,8 @@ services:
   kong-application:
     image: registry.neec.xyz/neeco/kong-application:latest
     environment:
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-database
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
     depends_on:
       - kong-database
     networks:
