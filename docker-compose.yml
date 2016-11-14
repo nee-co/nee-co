@@ -33,6 +33,30 @@ services:
       - aldea-cuenta
       - kong-aldea
 
+  # Cadena
+  cadena-database:
+    image: neo4j:3.0.7
+    environment:
+      NEO4J_AUTH: none
+    volumes:
+      - cadena:/data
+    networks:
+      - cadena
+  cadena-application:
+    image: registry.neec.xyz/neeco/cadena-application:latest
+    environment:
+      CADENA_PORT: 3000
+      CADENA_DATABASE_URL: http://cadena-database:7474
+      CADENA_SECRET_KEY_BASE:
+      CADENA_CUENTA_URL: http://cuenta-application:4000/
+      CADENA_CAJA_URL: http://caja-application:9000/
+    depends_on:
+      - cadena-database
+    networks:
+      - cadena
+      - cadena-cuenta
+      - kong-cadena
+
   # Cuenta
   cuenta-database:
     image: mariadb:10.1
@@ -65,6 +89,7 @@ services:
     networks:
       - cuenta
       - aldea-cuenta
+      - cadena-cuenta
       - kong-cuenta
 
   # Dios
@@ -125,6 +150,7 @@ services:
       - kong
       - puerta-kong
       - kong-aldea
+      - kong-cadena
       - kong-cuenta
       - dios-kong
 
@@ -148,6 +174,9 @@ volumes:
   aldea:
     external:
       name: neeco_aldea
+  cadena:
+    external:
+      name: neeco_cadena
   cuenta:
     external:
       name: neeco_cuenta
@@ -168,6 +197,9 @@ networks:
   cuenta:
     external:
       name: neeco_cuenta
+  cadena:
+    external:
+      name: neeco_cadena
   dios:
     external:
       name: neeco_dios
@@ -189,6 +221,9 @@ networks:
   kong-aldea:
     external:
       name: neeco_kong-aldea
+  kong-cadena:
+    external:
+      name: neeco_kong-cadena
   kong-cuenta:
     external:
       name: neeco_kong-cuenta
@@ -204,3 +239,6 @@ networks:
   aldea-cuenta:
     external:
       name: neeco_aldea-cuenta
+  cadena-cuenta:
+    external:
+      name: neeco_cadena-cuenta
