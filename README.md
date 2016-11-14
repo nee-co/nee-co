@@ -25,6 +25,7 @@
 |:----------:|:----------------:|:---------------------------------:|
 |   Aldea    |  イベント管理API | https://bitbucket.org/nhac/aldea  |
 |    Caja    |  ファイル管理API | https://bitbucket.org/nhac/caja   |
+|   Cadena   |  グループ管理API | https://bitbucket.org/nhac/cadena |
 |   Cuenta   |   ユーザ管理API  | https://bitbucket.org/nhac/cuenta |
 |    Dios    | 管理者用システム | https://bitbucket.org/nhac/dios   |
 |    Kong    |    API Gateway   | https://bitbucket.org/nhac/kong   |

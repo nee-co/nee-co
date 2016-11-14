@@ -4,10 +4,10 @@ proxy:
 	docker-compose up -d puerta
 
 db:
-	docker-compose up -d aldea-database cuenta-database dios-database kong-database
+	docker-compose up -d aldea-database cadena-database cuenta-database dios-database kong-database
 
 app:
-	docker-compose up -d aldea-application cuenta-application dios-application kong-application
+	docker-compose up -d aldea-application cadena-application cuenta-application dios-application kong-application
 
 seed: seed-aldea seed-cuenta seed-dios;
 seed-aldea:
@@ -27,6 +27,7 @@ migrate-dios:
 
 volumes:
 	@docker volume create --name neeco_aldea || true
+	@docker volume create --name neeco_cadena || true
 	@docker volume create --name neeco_cuenta || true
 	@docker volume create --name neeco_dios || true
 	@docker volume create --name neeco_kong || true
@@ -34,6 +35,7 @@ volumes:
 
 networks: puerta-networks kong-networks dios-networks internal-networks
 	@docker network create neeco_aldea || true
+	@docker network create neeco_cadena || true
 	@docker network create neeco_cuenta || true
 	@docker network create neeco_dios || true
 	@docker network create neeco_kong || true
@@ -44,6 +46,7 @@ puerta-networks:
 	@docker network create --internal neeco_puerta-dios || true
 kong-networks:
 	@docker network create --internal neeco_kong-aldea || true
+	@docker network create --internal neeco_kong-cadena || true
 	@docker network create --internal neeco_kong-cuenta || true
 dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
@@ -51,6 +54,7 @@ dios-networks:
 	@docker network create --internal neeco_dios-kong || true
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
+	@docker network create --internal neeco_cadena-cuenta || true
 
 import_default-files: volumes
 	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/cuenta-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
