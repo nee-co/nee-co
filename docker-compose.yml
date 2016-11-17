@@ -22,8 +22,8 @@ services:
       ALDEA_DATABASE_USER:
       ALDEA_DATABASE_PASSWORD:
       ALDEA_SECRET_KEY_BASE:
-      ALDEA_CUENTA_URL: http://cuenta-application:4000
-      ALDEA_IMAGE_URL: https://static.neec.ooo
+      CUENTA_URL: http://cuenta-application:4000
+      STATIC_URL: https://static.neec.ooo
     depends_on:
       - aldea-database
     volumes:
@@ -48,8 +48,8 @@ services:
       CADENA_PORT: 3000
       CADENA_DATABASE_URL: http://cadena-database:7474
       CADENA_SECRET_KEY_BASE:
-      CADENA_CUENTA_URL: http://cuenta-application:4000/
-      CADENA_CAJA_URL: http://caja-application:9000/
+      CUENTA_URL: http://cuenta-application:4000/
+      CAJA_URL: http://caja-application:9000/
     depends_on:
       - cadena-database
     networks:
@@ -80,8 +80,8 @@ services:
       CUENTA_DATABASE_HOST: cuenta-database
       CUENTA_DATABASE_USER:
       CUENTA_DATABASE_PASSWORD:
-      CUENTA_KONG_URL: http://kong-application:8001
-      CUENTA_IMAGE_URL: https://static.neec.ooo
+      KONG_URL: http://kong-application:8001
+      STATIC_URL:
     depends_on:
       - cuenta-database
     volumes:
@@ -113,7 +113,7 @@ services:
       DIOS_DATABASE_USER:
       DIOS_DATABASE_PASSWORD:
       DIOS_SECRET_KEY_BASE:
-      DIOS_KONG_URL: http://kong-application:8001
+      KONG_URL: http://kong-application:8001
       CUENTA_DATABASE_HOST: cuenta-database
       CUENTA_DATABASE_USER:
       CUENTA_DATABASE_PASSWORD:
