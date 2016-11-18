@@ -23,7 +23,7 @@ services:
       ALDEA_DATABASE_PASSWORD:
       ALDEA_SECRET_KEY_BASE:
       CUENTA_URL: http://cuenta-application:4000
-      STATIC_URL: https://static.neec.ooo
+      STATIC_URL:
     depends_on:
       - aldea-database
     volumes:
