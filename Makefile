@@ -4,10 +4,10 @@ proxy:
 	docker-compose up -d puerta-application
 
 db:
-	docker-compose up -d aldea-database cadena-database cuenta-database dios-database kong-database
+	docker-compose up -d aldea-database cadena-database caja-application cuenta-database dios-database kong-database
 
 app:
-	docker-compose up -d aldea-application cadena-application cuenta-application dios-application imagen-application kong-application
+	docker-compose up -d aldea-application cadena-application caja-database cuenta-application dios-application imagen-application kong-application
 
 seed: seed-cuenta seed-dios;
 seed-cuenta:
@@ -26,6 +26,7 @@ migrate-dios:
 volumes:
 	@docker volume create --name neeco_aldea || true
 	@docker volume create --name neeco_cadena || true
+	@docker volume create --name neeco_caja || true
 	@docker volume create --name neeco_cuenta || true
 	@docker volume create --name neeco_dios || true
 	@docker volume create --name neeco_kong || true
@@ -34,6 +35,7 @@ volumes:
 networks: puerta-networks kong-networks dios-networks imagen-networks internal-networks
 	@docker network create neeco_aldea || true
 	@docker network create neeco_cadena || true
+	@docker network create neeco_caja || true
 	@docker network create neeco_cuenta || true
 	@docker network create neeco_dios || true
 	@docker network create neeco_kong || true
@@ -45,6 +47,7 @@ puerta-networks:
 kong-networks:
 	@docker network create --internal neeco_kong-aldea || true
 	@docker network create --internal neeco_kong-cadena || true
+	@docker network create --internal neeco_kong-caja || true
 	@docker network create --internal neeco_kong-cuenta || true
 dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
@@ -58,6 +61,8 @@ imagen-networks:
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
 	@docker network create --internal neeco_cadena-cuenta || true
+	@docker network create --internal neeco_caja-cadena || true
+	@docker network create --internal neeco_caja-cuenta || true
 
 cert:
 	docker run -it --rm \
