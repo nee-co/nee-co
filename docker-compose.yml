@@ -23,14 +23,14 @@ services:
       ALDEA_DATABASE_PASSWORD:
       ALDEA_SECRET_KEY_BASE:
       CUENTA_URL: http://cuenta-application:4000/
-      STATIC_URL:
+      IMAGEN_URL: http://imagen-application:8000/
+      STATIC_IMAGE_URL:
     depends_on:
       - aldea-database
-    volumes:
-      - public:/app/uploads/
     networks:
       - aldea
       - aldea-cuenta
+      - aldea-imagen
       - kong-aldea
 
   # Cadena
@@ -48,13 +48,16 @@ services:
       CADENA_PORT: 3000
       CADENA_DATABASE_URL: http://cadena-database:7474/
       CADENA_SECRET_KEY_BASE:
-      CUENTA_URL: http://cuenta-application:4000/
       CAJA_URL: http://caja-application:9000/
+      CUENTA_URL: http://cuenta-application:4000/
+      IMAGEN_URL: http://imagen-application:8000/
+      STATIC_IMAGE_URL:
     depends_on:
       - cadena-database
     networks:
       - cadena
       - cadena-cuenta
+      - cadena-imagen
       - kong-cadena
 
   # Cuenta
@@ -80,14 +83,14 @@ services:
       CUENTA_DATABASE_HOST: cuenta-database
       CUENTA_DATABASE_USER:
       CUENTA_DATABASE_PASSWORD:
+      IMAGEN_URL: http://imagen-application:8000/
       KONG_URL: http://kong-application:8001/
-      STATIC_URL:
+      STATIC_IMAGE_URL:
     depends_on:
       - cuenta-database
-    volumes:
-      - public:/app/uploads/
     networks:
       - cuenta
+      - cuenta-imagen
       - aldea-cuenta
       - cadena-cuenta
       - kong-cuenta
@@ -129,6 +132,19 @@ services:
       - dios-cuenta
       - dios-kong
 
+  # Imagen
+  imagen-application:
+    image: registry.neec.xyz/neeco/imagen-application:latest
+    environment:
+      IMAGEN_PORT: 8000
+      IMAGEN_IMAGE_DIRECTORY: /srv/imagen/images/
+    volumes:
+      - images:/srv/imagen/images/
+    networks:
+      - aldea-imagen
+      - cadena-imagen
+      - cuenta-imagen
+
   # Kong
   kong-database:
     image: postgres:9.4
@@ -163,7 +179,7 @@ services:
     volumes:
       - ./.htpasswd:/etc/h2o/.htpasswd:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - public:/public/:ro
+      - images:/public/images/:ro
     networks:
       - puerta
       - puerta-web
@@ -186,9 +202,9 @@ volumes:
   kong:
     external:
       name: neeco_kong
-  public:
+  images:
     external:
-      name: neeco_public
+      name: neeco_images
 
 networks:
   aldea:
@@ -236,6 +252,15 @@ networks:
   dios-kong:
     external:
       name: neeco_dios-kong
+  aldea-imagen:
+    external:
+      name: neeco_aldea-imagen
+  cadena-imagen:
+    external:
+      name: neeco_cadena-imagen
+  cuenta-imagen:
+    external:
+      name: neeco_cuenta-imagen
   aldea-cuenta:
     external:
       name: neeco_aldea-cuenta

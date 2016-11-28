@@ -31,9 +31,9 @@ volumes:
 	@docker volume create --name neeco_cuenta || true
 	@docker volume create --name neeco_dios || true
 	@docker volume create --name neeco_kong || true
-	@docker volume create --name neeco_public || true
+	@docker volume create --name neeco_images || true
 
-networks: puerta-networks kong-networks dios-networks internal-networks
+networks: puerta-networks kong-networks dios-networks imagen-networks internal-networks
 	@docker network create neeco_aldea || true
 	@docker network create neeco_cadena || true
 	@docker network create neeco_cuenta || true
@@ -52,6 +52,10 @@ dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
 	@docker network create --internal neeco_dios-cuenta || true
 	@docker network create --internal neeco_dios-kong || true
+imagen-networks:
+	@docker network create --internal neeco_aldea-imagen || true
+	@docker network create --internal neeco_cadena-imagen || true
+	@docker network create --internal neeco_cuenta-imagen || true
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
 	@docker network create --internal neeco_cadena-cuenta || true
