@@ -156,7 +156,7 @@ services:
 
   # Puerta
   puerta:
-    image: registry.neec.xyz/neeco/puerta:latest
+    image: registry.neec.xyz/neeco/puerta-application:latest
     ports:
       - "80:80"
       - "443:443"
