@@ -69,8 +69,6 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_USER: $CUENTA_DATABASE_USER
       MYSQL_PASSWORD: $CUENTA_DATABASE_PASSWORD
-    ports: # TODO: ダミーデータ挿入のために開けている。頃合い見て閉じる
-      - "13306:3306"
     volumes:
       - cuenta:/var/lib/mysql
     networks:
