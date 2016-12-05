@@ -115,6 +115,7 @@ services:
       DIOS_DATABASE_PASSWORD:
       DIOS_SECRET_KEY_BASE:
       KONG_URL: http://kong-application:8001/
+      IMAGEN_URL: http://imagen-application:8000/
       CUENTA_DATABASE_HOST: cuenta-database
       CUENTA_DATABASE_USER:
       CUENTA_DATABASE_PASSWORD:
