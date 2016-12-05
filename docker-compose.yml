@@ -171,7 +171,7 @@ services:
       - dios-kong
 
   # Puerta
-  puerta:
+  puerta-application:
     image: registry.neec.xyz/neeco/puerta-application:latest
     ports:
       - "80:80"
