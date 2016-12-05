@@ -9,9 +9,7 @@ db:
 app:
 	docker-compose up -d aldea-application cadena-application cuenta-application dios-application imagen-application kong-application
 
-seed: seed-aldea seed-cuenta seed-dios;
-seed-aldea:
-	docker-compose run --rm aldea-application bundle exec rails db:seed
+seed: seed-cuenta seed-dios;
 seed-cuenta:
 	docker-compose run --rm cuenta-application mix ecto.seed
 seed-dios:
