@@ -1,7 +1,7 @@
 .PHONY: proxy db app seed migrate volumes networks cert htpasswd
 
 proxy:
-	docker-compose up -d puerta
+	docker-compose up -d puerta-application
 
 db:
 	docker-compose up -d aldea-database cadena-database cuenta-database dios-database kong-database
