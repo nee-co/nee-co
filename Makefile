@@ -1,4 +1,4 @@
-.PHONY: proxy db app seed migrate volumes networks import_defualt-files cert htpasswd
+.PHONY: proxy db app seed migrate volumes networks cert htpasswd
 
 proxy:
 	docker-compose up -d puerta
@@ -31,9 +31,9 @@ volumes:
 	@docker volume create --name neeco_cuenta || true
 	@docker volume create --name neeco_dios || true
 	@docker volume create --name neeco_kong || true
-	@docker volume create --name neeco_public || true
+	@docker volume create --name neeco_images || true
 
-networks: puerta-networks kong-networks dios-networks internal-networks
+networks: puerta-networks kong-networks dios-networks imagen-networks internal-networks
 	@docker network create neeco_aldea || true
 	@docker network create neeco_cadena || true
 	@docker network create neeco_cuenta || true
@@ -52,13 +52,14 @@ dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
 	@docker network create --internal neeco_dios-cuenta || true
 	@docker network create --internal neeco_dios-kong || true
+imagen-networks:
+	@docker network create --internal neeco_aldea-imagen || true
+	@docker network create --internal neeco_cadena-imagen || true
+	@docker network create --internal neeco_cuenta-imagen || true
+	@docker network create --internal neeco_dios-imagen || true
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
 	@docker network create --internal neeco_cadena-cuenta || true
-
-import_default-files: volumes
-	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/cuenta-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
-	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/aldea-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/events/default.png /work/"
 
 cert:
 	docker run -it --rm \

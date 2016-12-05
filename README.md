@@ -57,12 +57,6 @@ make networks
 cp .env{.example,}
 ```
 
-### デフォルトファイルをボリュームに取り込み
-
-```
-make import_default-files
-```
-
 ### 証明書作成
 
 ```
@@ -86,9 +80,6 @@ make migrate
 # (初回のみ) シード投入
 make seed
 
-# (初回のみ 開発時のみ) ダミーユーザ追加 ユーザ/パスワードは環境に合わせて適宜変更すること
-mysql -u cuenta -p -h127.0.0.1 -P13306 cuenta_prod < dummy.sql
-
 # 各アプリ立ち上げ
 make app
 
@@ -98,4 +89,8 @@ make proxy
 
 ### Kong API登録
 
-* Dios上で管理
+* Dios上で頑張って
+
+### ユーザ登録
+
+* Dios上で頑張って
