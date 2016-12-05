@@ -56,6 +56,7 @@ imagen-networks:
 	@docker network create --internal neeco_aldea-imagen || true
 	@docker network create --internal neeco_cadena-imagen || true
 	@docker network create --internal neeco_cuenta-imagen || true
+	@docker network create --internal neeco_dios-imagen || true
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
 	@docker network create --internal neeco_cadena-cuenta || true

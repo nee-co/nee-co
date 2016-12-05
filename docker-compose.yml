@@ -130,6 +130,7 @@ services:
       - puerta-dios
       - dios-aldea
       - dios-cuenta
+      - dios-imagen
       - dios-kong
 
   # Imagen
@@ -144,6 +145,7 @@ services:
       - aldea-imagen
       - cadena-imagen
       - cuenta-imagen
+      - dios-imagen
 
   # Kong
   kong-database:
@@ -249,6 +251,9 @@ networks:
   dios-cuenta:
     external:
       name: neeco_dios-cuenta
+  dios-imagen:
+    external:
+      name: neeco_dios-imagen
   dios-kong:
     external:
       name: neeco_dios-kong
