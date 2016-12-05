@@ -7,7 +7,7 @@ db:
 	docker-compose up -d aldea-database cadena-database cuenta-database dios-database kong-database
 
 app:
-	docker-compose up -d aldea-application cadena-application cuenta-application dios-application kong-application
+	docker-compose up -d aldea-application cadena-application cuenta-application dios-application imagen-application kong-application
 
 seed: seed-aldea seed-cuenta seed-dios;
 seed-aldea:
