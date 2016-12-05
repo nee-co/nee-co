@@ -1,4 +1,4 @@
-.PHONY: proxy db app seed migrate volumes networks import_defualt-files cert htpasswd
+.PHONY: proxy db app seed migrate volumes networks cert htpasswd
 
 proxy:
 	docker-compose up -d puerta
@@ -60,10 +60,6 @@ imagen-networks:
 internal-networks:
 	@docker network create --internal neeco_aldea-cuenta || true
 	@docker network create --internal neeco_cadena-cuenta || true
-
-import_default-files: volumes
-	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/cuenta-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/users/defaults /work/"
-	docker run --rm -i -v neeco_public:/work registry.neec.xyz/neeco/aldea-application:latest ash -c "cd /app/uploads/ && cp -r --parents images/events/default.png /work/"
 
 cert:
 	docker run -it --rm \

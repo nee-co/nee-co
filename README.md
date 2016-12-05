@@ -57,12 +57,6 @@ make networks
 cp .env{.example,}
 ```
 
-### デフォルトファイルをボリュームに取り込み
-
-```
-make import_default-files
-```
-
 ### 証明書作成
 
 ```
