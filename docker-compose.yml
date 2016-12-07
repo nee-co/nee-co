@@ -17,6 +17,7 @@ services:
   aldea-application:
     image: registry.neec.xyz/neeco/aldea-application:latest
     environment:
+      RAILS_LOG_TO_STDOUT: 'true'
       ALDEA_PORT: 3000
       ALDEA_DATABASE_HOST: aldea-database
       ALDEA_DATABASE_USER:
@@ -45,6 +46,7 @@ services:
   cadena-application:
     image: registry.neec.xyz/neeco/cadena-application:latest
     environment:
+      RAILS_LOG_TO_STDOUT: 'true'
       CADENA_PORT: 3000
       CADENA_DATABASE_URL: http://cadena-database:7474/
       CADENA_SECRET_KEY_BASE:
@@ -58,7 +60,42 @@ services:
       - cadena
       - cadena-cuenta
       - cadena-imagen
+      - caja-cadena
       - kong-cadena
+
+  # Caja
+  caja-database:
+    image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      MYSQL_DATABASE: caja_production
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $CAJA_DATABASE_USER
+      MYSQL_PASSWORD: $CAJA_DATABASE_PASSWORD
+    volumes:
+      - caja:/var/lib/mysql
+    networks:
+      - caja
+  caja-application:
+    image: registry.neec.xyz/neeco/caja-application:latest
+    environment:
+      CAJA_PORT: 9000
+      CAJA_DATABASE_HOST: caja-database
+      CAJA_DATABASE_USER:
+      CAJA_DATABASE_PASSWORD:
+      CAJA_S3_ACCESSKEY:
+      CAJA_S3_SECRETKEY:
+      CAJA_S3_BUCKETNAME:
+      CAJA_SECRET_KEY_BASE:
+      CUENTA_URL: http://cuenta-application:4000/
+      CADENA_URL: http://cadena-application:3000/
+    depends_on:
+      - caja-database
+    networks:
+      - caja
+      - caja-cadena
+      - caja-cuenta
+      - kong-caja
 
   # Cuenta
   cuenta-database:
@@ -91,6 +128,7 @@ services:
       - cuenta-imagen
       - aldea-cuenta
       - cadena-cuenta
+      - caja-cuenta
       - kong-cuenta
 
   # Dios
@@ -109,6 +147,7 @@ services:
   dios-application:
     image: registry.neec.xyz/neeco/dios-application:latest
     environment:
+      RAILS_LOG_TO_STDOUT: 'true'
       DIOS_PORT: 3000
       DIOS_DATABASE_HOST: dios-database
       DIOS_DATABASE_USER:
@@ -168,6 +207,7 @@ services:
       - puerta-kong
       - kong-aldea
       - kong-cadena
+      - kong-caja
       - kong-cuenta
       - dios-kong
 
@@ -194,6 +234,9 @@ volumes:
   cadena:
     external:
       name: neeco_cadena
+  caja:
+    external:
+      name: neeco_caja
   cuenta:
     external:
       name: neeco_cuenta
@@ -217,6 +260,9 @@ networks:
   cadena:
     external:
       name: neeco_cadena
+  caja:
+    external:
+      name: neeco_caja
   dios:
     external:
       name: neeco_dios
@@ -241,6 +287,9 @@ networks:
   kong-cadena:
     external:
       name: neeco_kong-cadena
+  kong-caja:
+    external:
+      name: neeco_kong-caja
   kong-cuenta:
     external:
       name: neeco_kong-cuenta
@@ -271,3 +320,9 @@ networks:
   cadena-cuenta:
     external:
       name: neeco_cadena-cuenta
+  caja-cadena:
+    external:
+      name: neeco_caja-cadena
+  caja-cuenta:
+    external:
+      name: neeco_caja-cuenta
