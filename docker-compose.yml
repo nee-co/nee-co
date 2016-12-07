@@ -17,6 +17,7 @@ services:
   aldea-application:
     image: registry.neec.xyz/neeco/aldea-application:latest
     environment:
+      RAILS_LOG_TO_STDOUT: 'true'
       ALDEA_PORT: 3000
       ALDEA_DATABASE_HOST: aldea-database
       ALDEA_DATABASE_USER:
@@ -45,6 +46,7 @@ services:
   cadena-application:
     image: registry.neec.xyz/neeco/cadena-application:latest
     environment:
+      RAILS_LOG_TO_STDOUT: 'true'
       CADENA_PORT: 3000
       CADENA_DATABASE_URL: http://cadena-database:7474/
       CADENA_SECRET_KEY_BASE:
@@ -145,6 +147,7 @@ services:
   dios-application:
     image: registry.neec.xyz/neeco/dios-application:latest
     environment:
+      RAILS_LOG_TO_STDOUT: 'true'
       DIOS_PORT: 3000
       DIOS_DATABASE_HOST: dios-database
       DIOS_DATABASE_USER:
