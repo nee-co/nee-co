@@ -4,10 +4,10 @@ proxy:
 	docker-compose up -d puerta-application
 
 db:
-	docker-compose up -d aldea-database cadena-database caja-application cuenta-database dios-database kong-database
+	docker-compose up -d aldea-database cadena-database caja-database cuenta-database dios-database kong-database
 
 app:
-	docker-compose up -d aldea-application cadena-application caja-database cuenta-application dios-application imagen-application kong-application
+	docker-compose up -d aldea-application cadena-application caja-application cuenta-application dios-application imagen-application kong-application
 
 seed: seed-cuenta seed-dios;
 seed-cuenta:
