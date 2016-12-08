@@ -176,7 +176,7 @@ services:
     image: registry.neec.xyz/neeco/imagen-application:latest
     environment:
       IMAGEN_PORT: 8000
-      IMAGEN_IMAGE_DIRECTORY: /srv/imagen/images/
+      IMAGEN_WORKERS: 5
     volumes:
       - images:/srv/imagen/images/
     networks:
