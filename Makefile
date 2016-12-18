@@ -51,6 +51,7 @@ kong-networks:
 	@docker network create --internal neeco_kong-cuenta || true
 dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
+	@docker network create --internal neeco_dios-caja || true
 	@docker network create --internal neeco_dios-cuenta || true
 	@docker network create --internal neeco_dios-kong || true
 imagen-networks:

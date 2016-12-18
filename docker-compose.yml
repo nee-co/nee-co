@@ -76,6 +76,7 @@ services:
       - caja:/var/lib/mysql
     networks:
       - caja
+      - dios-caja
   caja-application:
     image: registry.neec.xyz/neeco/caja-application:latest
     environment:
@@ -155,6 +156,9 @@ services:
       DIOS_SECRET_KEY_BASE:
       KONG_URL: http://kong-application:8001/
       IMAGEN_URL: http://imagen-application:8000/
+      CAJA_DATABASE_HOST: caja-database
+      CAJA_DATABASE_USER:
+      CAJA_DATABASE_PASSWORD:
       CUENTA_DATABASE_HOST: cuenta-database
       CUENTA_DATABASE_USER:
       CUENTA_DATABASE_PASSWORD:
@@ -167,6 +171,7 @@ services:
       - dios
       - puerta-dios
       - dios-aldea
+      - dios-caja
       - dios-cuenta
       - dios-imagen
       - dios-kong
@@ -296,6 +301,9 @@ networks:
   dios-aldea:
     external:
       name: neeco_dios-aldea
+  dios-caja:
+    external:
+      name: neeco_dios-caja
   dios-cuenta:
     external:
       name: neeco_dios-cuenta
