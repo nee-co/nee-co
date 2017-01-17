@@ -121,12 +121,14 @@ services:
       CUENTA_DATABASE_PASSWORD:
       IMAGEN_URL: http://imagen-application:8000/
       KONG_URL: http://kong-application:8001/
+      OLVIDO_URL: http://olvido-application:8080/
       STATIC_IMAGE_URL:
     depends_on:
       - cuenta-database
     networks:
       - cuenta
       - cuenta-imagen
+      - cuenta-olvido
       - aldea-cuenta
       - cadena-cuenta
       - caja-cuenta
@@ -214,7 +216,38 @@ services:
       - kong-cadena
       - kong-caja
       - kong-cuenta
+      - kong-olvido
       - dios-kong
+
+  # Olvido
+  olvido-database:
+    image: mariadb:10.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      MYSQL_DATABASE: olvido_production
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: $OLVIDO_DATABASE_USER
+      MYSQL_PASSWORD: $OLVIDO_DATABASE_PASSWORD
+    volumes:
+      - olvido:/var/lib/mysql
+    networks:
+      - olvido
+  olvido-application:
+    image: registry.neec.xyz/neeco/olvido-application:latest
+    environment:
+      OLVIDO_PORT: 8080
+      OLVIDO_DATABASE_HOST: olvido-database
+      OLVIDO_DATABASE_USER:
+      OLVIDO_DATABASE_PASSWORD:
+      OLVIDO_APP_KEY:
+      OLVIDO_HASH_KEY:
+      OLVIDO_CIPHER_KEY:
+    depends_on:
+      - olvido-database
+    networks:
+      - olvido
+      - kong-olvido
+      - cuenta-olvido
 
   # Puerta
   puerta-application:
@@ -251,6 +284,9 @@ volumes:
   kong:
     external:
       name: neeco_kong
+  olvido:
+    external:
+      name: neeco_olvido
   images:
     external:
       name: neeco_images
@@ -274,6 +310,9 @@ networks:
   kong:
     external:
       name: neeco_kong
+  olvido:
+    external:
+      name: neeco_olvido
   puerta:
     external:
       name: neeco_puerta
@@ -298,6 +337,9 @@ networks:
   kong-cuenta:
     external:
       name: neeco_kong-cuenta
+  kong-olvido:
+    external:
+      name: neeco_kong-olvido
   dios-aldea:
     external:
       name: neeco_dios-aldea
@@ -322,6 +364,9 @@ networks:
   cuenta-imagen:
     external:
       name: neeco_cuenta-imagen
+  cuenta-olvido:
+    external:
+      name: neeco_cuenta-olvido
   aldea-cuenta:
     external:
       name: neeco_aldea-cuenta

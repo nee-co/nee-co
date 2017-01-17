@@ -4,10 +4,10 @@ proxy:
 	docker-compose up -d puerta-application
 
 db:
-	docker-compose up -d aldea-database cadena-database caja-database cuenta-database dios-database kong-database
+	docker-compose up -d aldea-database cadena-database caja-database cuenta-database dios-database kong-database olvido-database
 
 app:
-	docker-compose up -d aldea-application cadena-application caja-application cuenta-application dios-application imagen-application kong-application
+	docker-compose up -d aldea-application cadena-application caja-application cuenta-application dios-application imagen-application kong-application olvido-application
 
 seed: seed-cuenta seed-dios;
 seed-cuenta:
@@ -30,6 +30,7 @@ volumes:
 	@docker volume create --name neeco_cuenta || true
 	@docker volume create --name neeco_dios || true
 	@docker volume create --name neeco_kong || true
+	@docker volume create --name neeco_olvido || true
 	@docker volume create --name neeco_images || true
 
 networks: puerta-networks kong-networks dios-networks imagen-networks internal-networks
@@ -39,6 +40,7 @@ networks: puerta-networks kong-networks dios-networks imagen-networks internal-n
 	@docker network create neeco_cuenta || true
 	@docker network create neeco_dios || true
 	@docker network create neeco_kong || true
+	@docker network create neeco_olvido || true
 	@docker network create neeco_puerta || true
 puerta-networks:
 	@docker network create --internal neeco_puerta-web || true
@@ -49,6 +51,7 @@ kong-networks:
 	@docker network create --internal neeco_kong-cadena || true
 	@docker network create --internal neeco_kong-caja || true
 	@docker network create --internal neeco_kong-cuenta || true
+	@docker network create --internal neeco_kong-olvido || true
 dios-networks:
 	@docker network create --internal neeco_dios-aldea || true
 	@docker network create --internal neeco_dios-caja || true
@@ -64,6 +67,7 @@ internal-networks:
 	@docker network create --internal neeco_cadena-cuenta || true
 	@docker network create --internal neeco_caja-cadena || true
 	@docker network create --internal neeco_caja-cuenta || true
+	@docker network create --internal neeco_cuenta-olvido || true
 
 cert:
 	docker run -it --rm \
