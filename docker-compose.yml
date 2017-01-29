@@ -265,6 +265,12 @@ services:
       - puerta-kong
       - puerta-dios
 
+  # Web
+  web-application:
+    image: nginx:1.10.2-alpine
+    networks:
+      - puerta-web
+
 volumes:
   aldea:
     external:
