@@ -77,6 +77,10 @@ services:
     networks:
       - caja
       - dios-caja
+  caja-redis:
+    image: redis:3.2.7-alpine
+    networks:
+      - caja
   caja-application:
     image: registry.neec.xyz/neeco/caja-application:latest
     environment:
@@ -84,14 +88,18 @@ services:
       CAJA_DATABASE_HOST: caja-database
       CAJA_DATABASE_USER:
       CAJA_DATABASE_PASSWORD:
+      CAJA_REDIS_HOST: caja-redis
+      CAJA_REDIS_PORT: 6379
       CAJA_S3_ACCESSKEY:
       CAJA_S3_SECRETKEY:
       CAJA_S3_BUCKETNAME:
       CAJA_SECRET_KEY_BASE:
       CUENTA_URL: http://cuenta-application:4000/
       CADENA_URL: http://cadena-application:3000/
+      API_URL:
     depends_on:
       - caja-database
+      - caja-redis
     networks:
       - caja
       - caja-cadena
