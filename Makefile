@@ -15,9 +15,11 @@ seed-cuenta:
 seed-dios:
 	docker-compose run --rm dios-application bundle exec rails db:seed
 
-migrate: migrate-aldea migrate-cuenta migrate-dios;
+migrate: migrate-aldea migrate-cadena migrate-cuenta migrate-dios;
 migrate-aldea:
 	docker-compose run --rm aldea-application bundle exec rails db:migrate
+migrate-cadena:
+	docker-compose run --rm cadena-application bundle exec rails neo4j:migrate
 migrate-cuenta:
 	docker-compose run --rm cuenta-application mix ecto.migrate
 migrate-dios:
