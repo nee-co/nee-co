@@ -78,6 +78,3 @@ cert:
   quay.io/letsencrypt/letsencrypt:latest certonly \
   --standalone --agree-tos -m nhac.neeco@gmail.com \
   -d neec.ooo -d api.neec.ooo -d admin.neec.ooo -d static.neec.ooo
-
-htpasswd:
-	htpasswd -c ./.htpasswd neeco
