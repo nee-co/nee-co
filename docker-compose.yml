@@ -12,8 +12,7 @@ services:
     volumes:
       - aldea:/var/lib/mysql
     networks:
-      - aldea
-      - dios-aldea
+      - neeco
   aldea-application:
     image: registry.neec.xyz/neeco/aldea-application:latest
     environment:
@@ -29,10 +28,7 @@ services:
     depends_on:
       - aldea-database
     networks:
-      - aldea
-      - aldea-cuenta
-      - aldea-imagen
-      - kong-aldea
+      - neeco
 
   # Cadena
   cadena-database:
@@ -42,7 +38,7 @@ services:
     volumes:
       - cadena:/data
     networks:
-      - cadena
+      - neeco
   cadena-application:
     image: registry.neec.xyz/neeco/cadena-application:latest
     environment:
@@ -57,11 +53,7 @@ services:
     depends_on:
       - cadena-database
     networks:
-      - cadena
-      - cadena-cuenta
-      - cadena-imagen
-      - caja-cadena
-      - kong-cadena
+      - neeco
 
   # Caja
   caja-database:
@@ -75,12 +67,11 @@ services:
     volumes:
       - caja:/var/lib/mysql
     networks:
-      - caja
-      - dios-caja
+      - neeco
   caja-redis:
     image: redis:3.2.7-alpine
     networks:
-      - caja
+      - neeco
   caja-application:
     image: registry.neec.xyz/neeco/caja-application:latest
     environment:
@@ -101,10 +92,7 @@ services:
       - caja-database
       - caja-redis
     networks:
-      - caja
-      - caja-cadena
-      - caja-cuenta
-      - kong-caja
+      - neeco
 
   # Cuenta
   cuenta-database:
@@ -118,8 +106,7 @@ services:
     volumes:
       - cuenta:/var/lib/mysql
     networks:
-      - cuenta
-      - dios-cuenta
+      - neeco
   cuenta-application:
     image: registry.neec.xyz/neeco/cuenta-application:latest
     environment:
@@ -134,13 +121,7 @@ services:
     depends_on:
       - cuenta-database
     networks:
-      - cuenta
-      - cuenta-imagen
-      - cuenta-olvido
-      - aldea-cuenta
-      - cadena-cuenta
-      - caja-cuenta
-      - kong-cuenta
+      - neeco
 
   # Dios
   dios-database:
@@ -154,7 +135,7 @@ services:
     volumes:
       - dios:/var/lib/mysql
     networks:
-      - dios
+      - neeco
   dios-application:
     image: registry.neec.xyz/neeco/dios-application:latest
     environment:
@@ -178,13 +159,7 @@ services:
     depends_on:
       - dios-database
     networks:
-      - dios
-      - puerta-dios
-      - dios-aldea
-      - dios-caja
-      - dios-cuenta
-      - dios-imagen
-      - dios-kong
+      - neeco
 
   # Imagen
   imagen-application:
@@ -195,10 +170,7 @@ services:
     volumes:
       - images:/srv/imagen/images/
     networks:
-      - aldea-imagen
-      - cadena-imagen
-      - cuenta-imagen
-      - dios-imagen
+      - neeco
 
   # Kong
   kong-database:
@@ -209,7 +181,7 @@ services:
     volumes:
       - kong:/var/lib/postgresql/data
     networks:
-      - kong
+      - neeco
   kong-application:
     image: registry.neec.xyz/neeco/kong-application:latest
     environment:
@@ -218,14 +190,7 @@ services:
     depends_on:
       - kong-database
     networks:
-      - kong
-      - puerta-kong
-      - kong-aldea
-      - kong-cadena
-      - kong-caja
-      - kong-cuenta
-      - kong-olvido
-      - dios-kong
+      - neeco
 
   # Olvido
   olvido-database:
@@ -239,7 +204,7 @@ services:
     volumes:
       - olvido:/var/lib/mysql
     networks:
-      - olvido
+      - neeco
   olvido-application:
     image: registry.neec.xyz/neeco/olvido-application:latest
     environment:
@@ -253,9 +218,7 @@ services:
     depends_on:
       - olvido-database
     networks:
-      - olvido
-      - kong-olvido
-      - cuenta-olvido
+      - neeco
 
   # Puerta
   puerta-application:
@@ -267,16 +230,13 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - images:/public/images/:ro
     networks:
-      - puerta
-      - puerta-web
-      - puerta-kong
-      - puerta-dios
+      - neeco
 
   # Web
   web-application:
     image: nginx:1.10.2-alpine
     networks:
-      - puerta-web
+      - neeco
 
 volumes:
   aldea:
@@ -305,90 +265,6 @@ volumes:
       name: neeco_images
 
 networks:
-  aldea:
+  neeco:
     external:
-      name: neeco_aldea
-  cuenta:
-    external:
-      name: neeco_cuenta
-  cadena:
-    external:
-      name: neeco_cadena
-  caja:
-    external:
-      name: neeco_caja
-  dios:
-    external:
-      name: neeco_dios
-  kong:
-    external:
-      name: neeco_kong
-  olvido:
-    external:
-      name: neeco_olvido
-  puerta:
-    external:
-      name: neeco_puerta
-  puerta-web:
-    external:
-      name: neeco_puerta-web
-  puerta-kong:
-    external:
-      name: neeco_puerta-kong
-  puerta-dios:
-    external:
-      name: neeco_puerta-dios
-  kong-aldea:
-    external:
-      name: neeco_kong-aldea
-  kong-cadena:
-    external:
-      name: neeco_kong-cadena
-  kong-caja:
-    external:
-      name: neeco_kong-caja
-  kong-cuenta:
-    external:
-      name: neeco_kong-cuenta
-  kong-olvido:
-    external:
-      name: neeco_kong-olvido
-  dios-aldea:
-    external:
-      name: neeco_dios-aldea
-  dios-caja:
-    external:
-      name: neeco_dios-caja
-  dios-cuenta:
-    external:
-      name: neeco_dios-cuenta
-  dios-imagen:
-    external:
-      name: neeco_dios-imagen
-  dios-kong:
-    external:
-      name: neeco_dios-kong
-  aldea-imagen:
-    external:
-      name: neeco_aldea-imagen
-  cadena-imagen:
-    external:
-      name: neeco_cadena-imagen
-  cuenta-imagen:
-    external:
-      name: neeco_cuenta-imagen
-  cuenta-olvido:
-    external:
-      name: neeco_cuenta-olvido
-  aldea-cuenta:
-    external:
-      name: neeco_aldea-cuenta
-  cadena-cuenta:
-    external:
-      name: neeco_cadena-cuenta
-  caja-cadena:
-    external:
-      name: neeco_caja-cadena
-  caja-cuenta:
-    external:
-      name: neeco_caja-cuenta
+      name: neeco_develop
