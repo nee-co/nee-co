@@ -1,4 +1,4 @@
-.PHONY: proxy db app seed migrate volumes networks cert htpasswd
+.PHONY: proxy db app seed migrate volumes networks cert
 
 proxy:
 	docker-compose up -d puerta-application
