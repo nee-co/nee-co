@@ -1,4 +1,4 @@
-.PHONY: proxy db app seed migrate volumes networks cert htpasswd
+.PHONY: proxy db app seed migrate volumes networks cert
 
 proxy:
 	docker-compose up -d puerta-application
@@ -6,7 +6,7 @@ proxy:
 db:
 	docker-compose up -d aldea-database cadena-database caja-database caja-redis cuenta-database dios-database kong-database olvido-database
 
-app:
+app: migrate
 	docker-compose up -d aldea-application cadena-application caja-application cuenta-application dios-application imagen-application kong-application olvido-application web-application
 
 seed: seed-cuenta seed-dios;
@@ -35,41 +35,8 @@ volumes:
 	@docker volume create --name neeco_olvido || true
 	@docker volume create --name neeco_images || true
 
-networks: puerta-networks kong-networks dios-networks imagen-networks internal-networks
-	@docker network create neeco_aldea || true
-	@docker network create neeco_cadena || true
-	@docker network create neeco_caja || true
-	@docker network create neeco_cuenta || true
-	@docker network create neeco_dios || true
-	@docker network create neeco_kong || true
-	@docker network create neeco_olvido || true
-	@docker network create neeco_puerta || true
-puerta-networks:
-	@docker network create --internal neeco_puerta-web || true
-	@docker network create --internal neeco_puerta-kong || true
-	@docker network create --internal neeco_puerta-dios || true
-kong-networks:
-	@docker network create --internal neeco_kong-aldea || true
-	@docker network create --internal neeco_kong-cadena || true
-	@docker network create --internal neeco_kong-caja || true
-	@docker network create --internal neeco_kong-cuenta || true
-	@docker network create --internal neeco_kong-olvido || true
-dios-networks:
-	@docker network create --internal neeco_dios-aldea || true
-	@docker network create --internal neeco_dios-caja || true
-	@docker network create --internal neeco_dios-cuenta || true
-	@docker network create --internal neeco_dios-kong || true
-imagen-networks:
-	@docker network create --internal neeco_aldea-imagen || true
-	@docker network create --internal neeco_cadena-imagen || true
-	@docker network create --internal neeco_cuenta-imagen || true
-	@docker network create --internal neeco_dios-imagen || true
-internal-networks:
-	@docker network create --internal neeco_aldea-cuenta || true
-	@docker network create --internal neeco_cadena-cuenta || true
-	@docker network create --internal neeco_caja-cadena || true
-	@docker network create --internal neeco_caja-cuenta || true
-	@docker network create --internal neeco_cuenta-olvido || true
+network:
+	@docker network create neeco_develop || true
 
 cert:
 	docker run -it --rm \
